@@ -1,0 +1,19 @@
+app/api/docs/[...slug]/route.ts
+  s_df9c539ac52380::t_0d8b644c5dda14 38-44,274-275
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "9636c1e5ff5910fab9006d63308d5db0505ae3ff",
+  "prompts": {},
+  "sessions": {
+    "s_df9c539ac52380": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019e7aca-01f6-7892-8459-3674d02f020d",
+        "model": "gpt-5.5"
+      },
+      "human_author": "pxlarified <jan.kramer@mizius.com>"
+    }
+  }
+}
