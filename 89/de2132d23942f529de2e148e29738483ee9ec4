@@ -1,0 +1,25 @@
+content/developers/api.mdx
+  s_70b1cdb01735a1::t_f93e69a6cad083 130,155,157,163,176-179,245-246
+content/developers/addpackhosting.mdx
+  s_70b1cdb01735a1::t_e233904cf822e0 24-37,79-83
+content/developers/addmechanic.mdx
+  s_70b1cdb01735a1::t_c2db462941985b 27,42-43,82,221,223
+content/developers/addcompatibility.mdx
+  s_70b1cdb01735a1::t_3329ee2c91e9ed 20,23-24,26-27,30,32,35,48,58,66,110-113,115-116,120,124-129
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "89de2132d23942f529de2e148e29738483ee9ec4",
+  "prompts": {},
+  "sessions": {
+    "s_70b1cdb01735a1": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019e7ac3-b4bf-7dc4-9b01-c091986023b9",
+        "model": "gpt-5.5"
+      },
+      "human_author": "pxlarified <jan.kramer@mizius.com>"
+    }
+  }
+}
