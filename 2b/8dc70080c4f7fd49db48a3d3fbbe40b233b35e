@@ -1,0 +1,19 @@
+content/usage/tutorials/23ho7.mdx
+  s_1d742dd98885e5::t_b0d8acc2871a48 13,22-23,36-37,61,65,68,70,72,79,97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.8",
+  "base_commit_sha": "2b8dc70080c4f7fd49db48a3d3fbbe40b233b35e",
+  "prompts": {},
+  "sessions": {
+    "s_1d742dd98885e5": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019edfd3-d487-739b-97eb-bbbb7efd84e1",
+        "model": "gpt-5.5"
+      },
+      "human_author": "pxlarified <jan.kramer@mizius.com>"
+    }
+  }
+}
