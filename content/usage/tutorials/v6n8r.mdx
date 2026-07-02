@@ -35,17 +35,13 @@ Use a deployment method that keeps those files in sync. Copying only `settings.y
 
 ### Generate the pack on every backend
 
-Restart each backend or run:
-
-```text
-/oraxen reload all
-```
+Restart each backend or run `/oraxen reload all`.
 
 Wait until Oraxen finishes generating and uploading the resource pack before joining or switching servers.
 
 ### Use hash-based skipping
 
-Keep PackLayer's default `HASH_ONLY` skip mode:
+Keep PackLayer's default `HASH_ONLY` skip-mode configuration.
 
 ```yaml
 skip-mode: HASH_ONLY
@@ -65,7 +61,7 @@ If the pack is sent again, enable `debug: true` in PackLayer and compare the fin
 
 If servers need genuinely different packs, PackLayer cannot skip all pack sends.
 
-You can instead send one shared pack from the lobby or entry server and disable pack dispatch on the remaining servers:
+You can instead send one shared pack from the lobby or entry server and disable pack dispatch on the remaining servers with the following configuration.
 
 ```yaml
 Pack:
@@ -75,7 +71,7 @@ Pack:
 
 Every asset needed on the network must then be included in the pack sent by the entry server.
 
-On Minecraft `1.20.3+`, Oraxen can also use resource-pack layers. Give each separate pack a unique layer name:
+On Minecraft `1.20.3+`, Oraxen can also use resource-pack layers. Give each separate pack a unique layer name.
 
 ```yaml
 Pack:
