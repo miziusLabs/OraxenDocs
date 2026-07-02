@@ -37,19 +37,62 @@ Do not use the `.bbmodel` file as the model inside the resource pack. Keep it se
 
 ### Place the files in Oraxen
 
-For a model named `wooden_chair`, place the exported files in the Oraxen pack directory:
+For a model named `wooden_chair`, place the exported files in the Oraxen pack directory.
 
-```text
-plugins/
-└── Oraxen/
-    └── pack/
-        ├── models/
-        │   └── furniture/
-        │       └── wooden_chair.json
-        └── textures/
-            └── furniture/
-                └── wooden_chair.png
-```
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/pack",
+              name: "pack",
+              children: [
+                {
+                  id: "plugins/Oraxen/pack/models",
+                  name: "models",
+                  children: [
+                    {
+                      id: "plugins/Oraxen/pack/models/furniture",
+                      name: "furniture",
+                      children: [
+                        {
+                          id: "plugins/Oraxen/pack/models/furniture/wooden_chair.json",
+                          name: "wooden_chair.json",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  id: "plugins/Oraxen/pack/textures",
+                  name: "textures",
+                  children: [
+                    {
+                      id: "plugins/Oraxen/pack/textures/furniture",
+                      name: "furniture",
+                      children: [
+                        {
+                          id: "plugins/Oraxen/pack/textures/furniture/wooden_chair.png",
+                          name: "wooden_chair.png",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ]}
+/>
 
 The model path is now `furniture/wooden_chair`.
 
@@ -75,11 +118,7 @@ The namespace is `oraxen`, followed by the texture path below `plugins/Oraxen/pa
 
 ## Test the exported files
 
-Add the model to an Oraxen item configuration, then run:
-
-```text
-/oraxen reload all
-```
+Add the model to an Oraxen item configuration. Then run `/oraxen reload all`.
 
 Check the console for model or texture validation errors. Reconnect after the pack has been regenerated so the client receives the new files.
 
