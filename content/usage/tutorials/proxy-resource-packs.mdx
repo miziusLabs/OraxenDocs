@@ -1,89 +1,71 @@
 ---
 title: "🌐 Resource packs on a proxy"
-description: "Set up Oraxen resource packs across a Velocity or BungeeCord network."
+description: "Using Oraxen resource packs on a Velocity or BungeeCord network."
 ---
 
 import { Callout, Steps } from 'nextra/components'
 
 # 🌐 Resource packs on a proxy
 
-This guide explains how to distribute Oraxen resource packs across a Velocity or BungeeCord network without unnecessary pack downloads.
+## Overview
 
-## Understand the limitation first
+This tutorial explains how to use Oraxen resource packs on a Velocity or BungeeCord network without making players download the same pack every time they switch servers.
 
-Minecraft does not automatically combine the resource packs sent by different backend servers. A proxy plugin such as [PackLayer](/compatibility/packlayer) can prevent a duplicate send, but only when the **final pack is identical** to the one the player already has.
+For PackLayer to skip a resource-pack send, every server involved must generate the same final pack. PackLayer does not merge different packs.
 
-`multi_version_packs` solves a different problem: it selects packs for different **Minecraft client versions**. It does not make different backend-server packs interchangeable. See [ViaVersion compatibility](/compatibility/viaversion) when client-version support is the goal.
+<Callout type="info">
+  `multi_version_packs` handles different Minecraft client versions. It does not make separate backend-server packs compatible with each other. Read the [ViaVersion documentation](/compatibility/viaversion) for client-version support.
+</Callout>
 
-## Choose the correct setup
-
-| Requirement | Recommended setup | Expected player experience |
-| --- | --- | --- |
-| Every backend uses the same Oraxen assets | Use one identical generated pack on every backend and install PackLayer on the proxy. | One download, then seamless switching. |
-| Servers need different features, but all assets can live in one pack | Generate one shared pack and send it from the lobby or entry server only. | One download when entering the network. |
-| Servers require genuinely different packs and players use Minecraft 1.20.3+ | Use distinct resource-pack layers. | Each distinct layer may still need to download once. |
-| Servers require genuinely different packs on older clients | Let each server send its own pack. | A pack change or reload on server switch is expected. |
-
-## Option A: one identical pack on every backend
-
-Use this when your lobby, survival, minigame, and other servers should all use the same Oraxen assets.
+## Installation
 
 <Steps>
 
-### Install PackLayer on the proxy
+### Install PackLayer on your proxy
 
-Install PackLayer in the `plugins` directory of the **Velocity or BungeeCord proxy**. Do not install it on the backend Paper servers.
+Download PackLayer and place it in the `plugins` folder of your Velocity or BungeeCord proxy.
 
-Keep its default `HASH_ONLY` skip mode unless you have a specific reason to use another mode. Hash checking matters especially when self-hosting, because a pack URL can stay the same after its contents change.
+Do not install PackLayer on backend Paper servers.
 
-### Keep the Oraxen pack source identical
+### Keep the pack sources identical
 
-The simplest reliable approach is to copy the complete `plugins/Oraxen` directory from one backend to every backend that should share the pack.
+Every backend server that should share a pack must use the same Oraxen resource-pack source files and the same item, glyph, font, sound, and model configuration that affects pack generation.
 
-This includes item files, resource-pack models, textures, fonts, sounds, merged content, and settings. Copying only `settings.yml` is not enough.
+Use a deployment method that keeps those files in sync. Copying only `settings.yml` is not enough.
 
-### Regenerate the pack on every backend
+### Generate the pack on every backend
 
-Restart the servers or run:
+Restart each backend or run:
 
 ```text
 /oraxen reload all
 ```
 
-Wait until each server has finished generating and uploading its pack before testing. A player who joins while generation or uploading is still in progress can receive no pack or an older one.
+Wait until Oraxen finishes generating and uploading the resource pack before joining or switching servers.
 
-### Verify the actual generated pack
+### Use hash-based skipping
 
-Check each backend's console output or configured pack host. The generated pack must have the same final hash on every backend. An identical URL is a useful quick check with hosts that produce content-specific URLs, but the SHA-1 hash is the source of truth.
+Keep PackLayer's default `HASH_ONLY` skip mode:
 
-### Test through the proxy
+```yaml
+skip-mode: HASH_ONLY
+```
 
-Join the first backend, wait until the pack is fully loaded, then switch servers through the proxy. Enable PackLayer's `debug: true` setting if a pack is sent again unexpectedly.
+This makes PackLayer compare the pack hash before it decides whether to skip a send. It is particularly important when self-hosting, because a pack URL can stay the same after its contents change.
+
+### Test server switching
+
+Join one backend through the proxy and wait until the resource pack has loaded. Then switch to another backend that uses the same pack.
+
+If the pack is sent again, enable `debug: true` in PackLayer and compare the final pack hash generated by both servers.
 
 </Steps>
 
-<Callout type="warning">
-  PackLayer skips a duplicate pack; it does not merge different packs. A single changed texture, model, font, sound, or generated definition makes the final packs different.
-</Callout>
+## Different packs on different servers
 
-## Option B: send one shared pack from the entry server
+If servers need genuinely different packs, PackLayer cannot skip all pack sends.
 
-Use this when backends have different gameplay, but all required client assets can be included in one common pack.
-
-1. Put the union of required Oraxen assets into the pack generated by the lobby or entry server.
-2. Keep resource-pack dispatch enabled there.
-3. Disable dispatch on the remaining backend servers.
-4. Keep the matching Oraxen item and mechanic configuration on every backend that uses those items or blocks.
-
-Lobby or entry server:
-
-```yaml
-Pack:
-  dispatch:
-    send: true
-```
-
-Backend servers:
+You can instead send one shared pack from the lobby or entry server and disable pack dispatch on the remaining servers:
 
 ```yaml
 Pack:
@@ -91,11 +73,9 @@ Pack:
     send: false
 ```
 
-This assumes players enter through the server that sends the shared pack. Players who can connect directly to a backend need another reliable way to receive the pack.
+Every asset needed on the network must then be included in the pack sent by the entry server.
 
-## Option C: use resource-pack layers
-
-On Minecraft `1.20.3+`, Oraxen can add a pack instead of replacing the active one. Give each independently dispatched pack a stable, distinct layer name:
+On Minecraft `1.20.3+`, Oraxen can also use resource-pack layers. Give each separate pack a unique layer name:
 
 ```yaml
 Pack:
@@ -103,22 +83,20 @@ Pack:
     layer: "oraxen-survival"
 ```
 
-For another server, use a different name, for example `oraxen-minigames`.
+Layers allow multiple packs to coexist, but players still have to download each unique pack at least once.
 
-Layers are useful when separate packs are necessary, but they do not remove the initial download for each unique pack. They are not a replacement for one shared pack plus PackLayer.
+## Troubleshooting
 
-<Callout type="info">
-  A non-empty `Pack.dispatch.layer` makes Oraxen use the layered resource-pack API. This is intended for BungeeCord or Velocity environments and requires Minecraft `1.20.3+`.
-</Callout>
+**The pack downloads again after switching servers**
 
-## Troubleshooting checklist
+- Confirm that PackLayer is installed on the proxy.
+- Compare the final generated pack hash on both servers.
+- Make sure both servers finished generation and uploading before the player joined.
+- Check PackLayer's server filter and enable `debug: true`.
 
-- Confirm PackLayer is installed on the proxy, not a backend server.
-- Compare the final pack hashes, not just the names of Oraxen configuration files.
-- Check that every backend finished pack generation and uploading before a player joined.
-- Ensure the backend is not excluded by PackLayer's server filter.
-- When self-hosting, avoid URL-only duplicate detection because the URL can remain unchanged after a new upload.
-- Use `debug: true` in PackLayer to see why it did or did not skip a send.
+**Players receive no pack after a restart**
+
+Oraxen needs time to generate and upload the pack. Players who join before this process finishes may not receive the current pack. Wait for the generation and upload messages in the console before allowing players to join.
 
 ## Related pages
 
