@@ -73,7 +73,7 @@ Layers allow multiple packs to coexist, but players still have to download each 
 
 **The resource-pack request appears again after switching servers**
 
-Confirm that OneTimePack is installed on the proxy and that both backends generate the same final pack. Set OneTimePack's `plugin.log-level` to `4` and restart the proxy to enable debug messages.
+Confirm that OneTimePack is installed on the proxy and that both backends generate the same final pack. Set `log-level` under OneTimePack's `plugin` section to `4`, then restart the proxy to enable debug messages.
 
 ```yaml
 plugin:
