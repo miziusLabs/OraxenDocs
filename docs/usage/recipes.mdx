@@ -74,7 +74,7 @@ Recipe inputs and results support several item formats.
 `mmoitems_type` + `mmoitems_id` - Use an MMOItems item. <Highlight color="#2E8B57">**Optional compatibility**</Highlight><br />
 `ecoitem_id` - Use an EcoItems item ID. <Highlight color="#2E8B57">**Optional compatibility**</Highlight><br />
 `amount` - Set a result stack size, a shapeless ingredient count, or the amount consumed by a cauldron, anvil, or grindstone recipe.<br />
-`permission` - Require a permission to use a crafting, smithing, cauldron, anvil, or grindstone recipe. <Highlight color="#2E8B57">**Optional**</Highlight><br />
+`permission` - Require a permission to use a shaped, shapeless, smithing, cauldron, anvil, or grindstone recipe. <Highlight color="#2E8B57">**Optional**</Highlight><br />
 
 <Callout type="info">
   Oraxen creates the recipe files automatically on first load. You can add entries manually or generate them ingame with the recipe builder.
@@ -260,7 +260,7 @@ Cauldron recipes run when a player right-clicks the matching cauldron with the c
 `result` - Item produced.<br />
 `fluid` - `water`, `lava`, `powder_snow`, or `empty`. Defaults to `water`.<br />
 `level` - Exact required water or powder-snow level from `1` to `3`. Defaults to `1`; lava and empty cauldrons use `1`.<br />
-`level_change` - Level change after crafting. Filled cauldrons default to `-1`; empty cauldrons require `0`.<br />
+`level_change` - Level change after crafting. Filled cauldrons default to `-1` if omitted; empty cauldrons must be explicitly set to `0`.<br />
 
 Water and powder-snow changes may reduce the level to an empty cauldron or raise it up to level `3`. Lava supports `-1` to empty the cauldron or `0` to preserve it.
 
