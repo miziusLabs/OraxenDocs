@@ -260,7 +260,7 @@ Cauldron recipes run when a player right-clicks the matching cauldron with the c
 `result` - Item produced.<br />
 `fluid` - `water`, `lava`, `powder_snow`, or `empty`. Defaults to `water`.<br />
 `level` - Exact required water or powder-snow level from `1` to `3`. Defaults to `1`; lava and empty cauldrons use `1`.<br />
-`level_change` - Level change after crafting. Filled cauldrons default to `-1` if omitted; empty cauldrons must be explicitly set to `0`.<br />
+`level_change` - Level change after crafting. When omitted, filled cauldrons default to `-1` and empty cauldrons default to `0`. Empty cauldrons only accept `0`; any other value fails recipe loading.<br />
 
 Water and powder-snow changes may reduce the level to an empty cauldron or raise it up to level `3`. Lava supports `-1` to empty the cauldron or `0` to preserve it.
 
