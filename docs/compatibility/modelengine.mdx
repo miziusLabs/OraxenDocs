@@ -15,13 +15,14 @@ Oraxen imports ModelEngine's resource pack automatically when it generates its o
 </Callout>
 
 <Callout type="important">
-    ModelEngine may include core shader files that conflict with Oraxen. Exclude them from imported packs with this setting.
+    Imported core shader files are not excluded by default. To exclude them because they conflict with Oraxen or another pack, add this pattern to `pack.import.exclude`.
 
     ```yaml
     pack:
       import:
         exclude:
-          core-shaders: true
+          # Add this rule to your existing list.
+          - '**/assets/minecraft/shaders/core/**'
     ```
 </Callout>
 

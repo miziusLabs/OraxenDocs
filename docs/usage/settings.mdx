@@ -240,7 +240,7 @@ Enable at most one of <code>model-data.float</code> and <code>model-data.ids</co
 <code>pack.verification</code> checks textures and models for valid resource-pack formatting.<br />
 <code>pack.excluded-file-extensions</code> lists file extensions omitted from the final ZIP.<br />
 <code>pack.compression</code> sets the ZIP compression level.<br />
-<code>pack.protection.size-spoofing</code> spoofs ZIP entry sizes to discourage extraction.<br />
+<code>pack.protection.size-spoofing</code> spoofs entry sizes in the ZIP sent to clients to discourage ordinary extraction. It is disabled by default. This obfuscation is not encryption and does not affect the readable <code>unprotected-location</code> export.<br />
 <code>pack.protection.obfuscation.type</code> selects <code>NONE</code>, <code>SIMPLE</code>, or <code>FULL</code>. <code>SIMPLE</code> renames resource paths. <code>FULL</code> also renames namespaces.<br />
 <code>pack.comment</code> sets the ZIP archive comment.
 
@@ -255,7 +255,25 @@ pack:
       duplicates: true
       item-base-models: false
     exclude:
-      core-shaders: false
+      # Optional. Add this rule to exclude Minecraft core shaders.
+      # - '**/assets/minecraft/shaders/core/**'
+
+      # Documentation and editable source files.
+      - '**/*.md'
+      - '**/*.psd'
+      - '**/*.bbmodel'
+
+      # Metadata and database files.
+      - '**/.DS_Store'
+      - '**/*.db'
+      - '**/*.ini'
+      - '**/__MACOSX/**'
+
+      # Archives inside imported pack contents.
+      - '**/*.zip'
+      - '**/*.gz'
+      - '**/*.tar'
+      - '**/*.jar'
     retain-custom-model-data: true
 ```
 
@@ -263,7 +281,10 @@ pack:
 <code>pack.import.merge.fonts</code> merges duplicate font files and excludes the original duplicates from the final pack.<br />
 <code>pack.import.merge.duplicates</code> merges duplicate imported resources when possible.<br />
 <code>pack.import.merge.item-base-models</code> attempts to merge item base-model JSON files such as <code>paper.json</code> instead of generating item configs from them.<br />
-<code>pack.import.exclude.core-shaders</code> removes imported Minecraft core shaders from the pack.<br />
+<code>pack.import.exclude</code> lists case-insensitive glob patterns for files to omit.<br />
+Patterns apply to local pack files and imported ZIP, folder, overlay, and ModelEngine contents. They apply to files inside uploaded ZIPs, so those ZIPs remain import sources. Oraxen-generated resources are not filtered.<br />
+The default rules omit Markdown, PSD, BBModel, metadata, database, and nested archive files. Imported core shader files are not excluded by default. Add <code>**/assets/minecraft/shaders/core/**</code> to this list to exclude them.<br />
+In these patterns, <code>*</code> matches within a name, <code>?</code> matches one character, and <code>**</code> matches across folders. A leading <code>**/</code> also matches files at the pack root. Set <code>pack.import.exclude: []</code> to disable configurable exclusions.<br />
 <code>pack.import.retain-custom-model-data</code> keeps CustomModelData values from imported files. This can conflict with Oraxen items that use the same values.
 
 ### Upload
