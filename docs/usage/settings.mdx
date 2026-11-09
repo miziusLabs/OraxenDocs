@@ -283,8 +283,8 @@ pack:
 <code>pack.import.merge.item-base-models</code> attempts to merge item base-model JSON files such as <code>paper.json</code> instead of generating item configs from them.<br />
 <code>pack.import.exclude</code> lists case-insensitive glob patterns for files to omit.<br />
 Patterns apply to local pack files and imported ZIP, folder, overlay, and ModelEngine contents. They apply to files inside uploaded ZIPs, so those ZIPs remain import sources. Oraxen-generated resources are not filtered.<br />
-The default rules omit Markdown, PSD, BBModel, metadata, database, and nested archive files. Imported core shader files are not excluded by default. Add <code>**/assets/minecraft/shaders/core/**</code> to this list to exclude them.<br />
-In these patterns, <code>*</code> matches within a name, <code>?</code> matches one character, and <code>**</code> matches across folders. A leading <code>**/</code> also matches files at the pack root. Set <code>pack.import.exclude: []</code> to disable configurable exclusions.<br />
+The default rules omit Markdown, PSD, BBModel, metadata, database, and nested archive files. Imported core shader files are not excluded by default. Add <code>&#42;&#42;/assets/minecraft/shaders/core/&#42;&#42;</code> to this list to exclude them.<br />
+In these patterns, <code>*</code> matches within a name, <code>?</code> matches one character, and <code>&#42;&#42;</code> matches across folders. A leading <code>&#42;&#42;/</code> also matches files at the pack root. Set <code>pack.import.exclude: []</code> to disable configurable exclusions.<br />
 <code>pack.import.retain-custom-model-data</code> keeps CustomModelData values from imported files. This can conflict with Oraxen items that use the same values.
 
 ### Upload
