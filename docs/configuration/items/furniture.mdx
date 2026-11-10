@@ -146,6 +146,20 @@ mechanics:
       - 0,0,0 1,2 # Hitbox at the center of the furniture, one block wide and two blocks tall.
 ```
 
+## Lights
+
+Use `lights` to add light sources to placed furniture. Each entry uses `x,y,z level`. The coordinates are whole-number offsets relative to the furniture and rotate with it. The light level ranges from 0 to 15.
+
+```yaml
+mechanics:
+  furniture:
+    lights:
+      - 0,1,0 15 # Light one block above the furniture at level 15.
+      - 1,0,0 10 # Light one block to the side at level 10.
+```
+
+These lights illuminate the surrounding blocks. To change how bright the furniture model itself appears, use `properties.brightness` instead.
+
 ## Appearance
 
 Use the <code>pack</code> section to control how the item looks in the inventory or in the hand.<br />
