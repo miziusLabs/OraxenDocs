@@ -70,7 +70,8 @@ table:
       hardness: 5 # Controls how long the furniture takes to break.
       breakable: true # Allows players to break the furniture.
       events: # Actions to run when a player clicks the furniture.
-        - click: right # Run the actions on a right-click.
+        - trigger: click
+          type: RIGHT # Run the actions on a right-click.
           actions: # Run these actions in order.
             - command: 'say "<Player> clicked this furniture"' # Run this command with the player's name.
               executor: CONSOLE # Runs the command as the server console.
@@ -187,18 +188,22 @@ Details on controlling item appearance can be found in the <Highlight color="#18
 
 ## Events
 
-Add <code>events</code> to run actions when a player clicks a barrier or hitbox. Each event has a <code>click</code> type and a list of <code>actions</code>.
+Add <code>events</code> to run actions when a player clicks or breaks furniture. Each event has a <code>trigger</code> and a list of <code>actions</code>.
 
-Set <code>click</code> to <code>left</code>, <code>right</code>, or <code>both</code>. The default is <code>both</code>.
+Set <code>trigger</code> to <code>click</code> or <code>break</code>. The default is <code>click</code>. Click events run when a player clicks a barrier or hitbox. Set their <code>type</code> to <code>LEFT</code>, <code>RIGHT</code>, or <code>BOTH</code>. The default is <code>BOTH</code>.
 
-Furniture with a <code>left</code> or <code>both</code> event defaults to <code>breakable: false</code>, so hits trigger actions without breaking it. Other furniture defaults to <code>breakable: true</code>. Set <code>breakable</code> explicitly to override the default.
+Break actions run after a successful player break, once per furniture item even if it has multiple barriers. Cancelled breaks and removals without a player do not run break actions.
+
+Furniture with a <code>LEFT</code> or <code>BOTH</code> click event defaults to <code>breakable: false</code>. Other furniture, including furniture with only break events, defaults to <code>breakable: true</code>. Set <code>breakable</code> explicitly to override the default.
 
 ```yaml
 my_furniture:
   mechanics:
     furniture:
+      breakable: true
       events:
-        - click: both
+        - trigger: click
+          type: RIGHT
           actions:
             - command: 'say "<Player> clicked this furniture"'
               executor: CONSOLE
@@ -207,6 +212,9 @@ my_furniture:
               conditions:
                 - 'player.hasPermission("myserver.furniture.use")'
                 - 'player.isSneaking()'
+        - trigger: break
+          actions:
+            - message: '<yellow>You broke the furniture!'
 ```
 
 ### Actions
@@ -221,7 +229,7 @@ Use <code>message</code> to send MiniMessage text to the player. <code>&lt;Playe
 
 Add <code>condition</code> for one check or <code>conditions</code> for a list. The action runs only when every check passes. Use <code>player</code> or <code>#player</code> to check the player. Use <code>server</code> or <code>#server</code> to check the server.
 
-If an action has no conditions, it runs on every matching click. If a condition is invalid, Oraxen skips the action and logs a warning.
+If an action has no conditions, it runs on every matching event. If a condition is invalid, Oraxen skips the action and logs a warning.
 
 In the example above, the command requires the <code>myserver.furniture.use</code> permission. The greeting also requires the player to be sneaking. Put conditions on each action you want to restrict.
 
