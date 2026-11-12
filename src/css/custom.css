@@ -216,6 +216,12 @@ summary[id]:hover .summary-link,
   display: inline-block;
   position: relative;
 }
+li > p:has(+ .oraxen-tooltip) {
+  display: inline;
+}
+li > p:has(+ .oraxen-tooltip)::after {
+  content: ' ';
+}
 .oraxen-tooltip__trigger {
   text-decoration: underline dotted;
   text-underline-offset: .2em;
@@ -257,6 +263,7 @@ summary[id]:hover .summary-link,
 .oraxen-tooltip__content pre {
   max-width: 100%;
   overflow-x: auto;
+  text-align: left;
 }
 .oraxen-tooltip__content > :first-child { margin-top: 0; }
 .oraxen-tooltip__content > :last-child { margin-bottom: 0; }
