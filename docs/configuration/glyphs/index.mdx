@@ -315,3 +315,18 @@ Oraxen dynamically replaces placeholders when a GUI opens, ensuring titles remai
 `<glyph:yourglyph>` - Basic usage.<br />
 `<shift:N>` - Shifts N pixels (Negative values supported).<br />
 </details>
+
+
+## Choose a glyph font
+
+Set `font` on a glyph to choose the font file that contains its provider. The default is `minecraft:default`.
+
+```yaml
+server_icon:
+  texture: icons/server
+  ascent: 8
+  height: 8
+  font: oraxen:icons
+```
+
+This writes the glyph provider to `assets/oraxen/font/icons.json`. Oraxen's glyph tags select the glyph's font automatically. When you insert the raw Unicode character yourself, apply the same font with MiniMessage, such as `<font:oraxen:icons>...</font>`.
