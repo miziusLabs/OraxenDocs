@@ -942,7 +942,7 @@ mechanics:
           add: 0
 ```
 
-`events` runs actions when a player clicks or breaks a placed block. See [block and furniture events](#click-events) for triggers, executors, and conditions.
+`events` runs actions when a player places, clicks, or breaks a custom block. See [block and furniture events](#click-events) for triggers, executors, and conditions.
 
 Each loot entry can use `silk-touch` to control whether it drops based on the breaking tool.<br />
 - `any` or `false` (default); Drop with or without Silk Touch.
@@ -1117,7 +1117,7 @@ my_furniture:
             - message: '<yellow>You broke the furniture!'
 ```
 
-Set `trigger` to `click` or `break`. The default is `click`. For click events, `type` accepts `LEFT`, `RIGHT`, or `BOTH` (default). Actions run in order.<br />
+Set `trigger` to `click`, `break`, or `place`. Furniture also supports `sit`, which runs after the player sits down. The default is `click`. For click events, `type` accepts `LEFT`, `RIGHT`, or `BOTH` (default). Actions run in order.<br />
 Break actions run after a successful player break. They do not run for cancelled breaks or removals without a player. Furniture break actions run once per furniture item, even when it has multiple barriers.<br />
 Furniture with a `LEFT` or `BOTH` click event defaults to `breakable: false`. Other furniture, including furniture with only break events, defaults to `breakable: true`. Set `breakable` explicitly to override the default.<br />
 `command` uses `PLAYER` (default), `CONSOLE`, or `OP-PLAYER` as its `executor`.<br />
