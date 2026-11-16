@@ -116,8 +116,6 @@ obsidian_ingot_from_crying_obsidian:
   Omitting `group` or leaving it empty keeps the recipes as separate recipe book entries.
 </Callout>
 
-## Recipe Formats
-
 ## Ingredient tags and predicates
 
 Ingredients accept namespaced shorthand such as `oraxen:obsidian_ingot` and `minecraft:diamond`. Quote tag references such as `"#minecraft:planks"` because YAML treats an unquoted `#` as a comment. Lists accept any of their entries.
@@ -177,21 +175,7 @@ For shapeless crafting, mark one ingredient with `source: true`. That ingredient
 
 Smithing uses `transform.source: base`. Add `transform.keep-components` to the smithing recipe to select the copied components. Support for components beyond enchantments, damage, repair cost, custom name, lore, and unbreakable depends on the server API.
 
-## Brewing recipes
-
-Configure brewing recipes manually in `plugins/Oraxen/recipes/brewing.yml`. The container is the bottle-slot item and the ingredient is the reagent. Each must have an amount of one. One brewing cycle consumes one reagent regardless of the number of matching bottles.
-
-```yaml title="plugins/Oraxen/recipes/brewing.yml"
-brew_ruby:
-  container:
-    minecraft-type: POTION
-  ingredient:
-    oraxen-item: ruby
-  result:
-    oraxen-item: ruby_potion
-```
-
-Containers and ingredients accept the same selectors, tags, and predicates as other recipe ingredients. Brewing predicate support depends on the Paper API available on the server. Reload recipes with `/oraxen reload recipes`.
+## Recipe Formats
 
 <details>
 <summary id="shaped"><strong>🧩 Shaped</strong></summary>
@@ -383,6 +367,28 @@ wash_ruby:
   result:
     oraxen-item: ruby
 ```
+</details>
+
+<details>
+<summary id="brewing"><strong>🧪 Brewing</strong></summary>
+
+Brewing recipes use a bottle-slot item and a reagent. Each input must have an amount of one. A brewing cycle consumes one reagent regardless of the number of matching bottles.
+
+`container` - Bottle-slot input.<br />
+`ingredient` - Brewing reagent.<br />
+`result` - Brewed output item.<br />
+
+```yaml title="plugins/Oraxen/recipes/brewing.yml"
+brew_ruby:
+  container:
+    minecraft-type: POTION
+  ingredient:
+    oraxen-item: ruby
+  result:
+    oraxen-item: ruby_potion
+```
+
+Both inputs support ingredient selectors, tags, and predicates. Predicate support depends on the server's Paper API.
 </details>
 
 ## Ingame Builder
