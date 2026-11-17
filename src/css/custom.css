@@ -332,3 +332,19 @@ li > p:has(+ .oraxen-tooltip)::after {
   --callout-bg: #0f2f1d;
   --callout-text: rgba(236, 253, 245, 0.92);
 }
+
+.discord-ping {
+  background-color: rgba(88, 101, 242, 0.3);
+  border-radius: 4px;
+  color: #c9d2ff;
+  font-weight: 500;
+  padding: 0 2px;
+}
+.oraxen-tooltip__trigger:has(.discord-ping) {
+  text-decoration: none;
+}
+.oraxen-tooltip:hover .oraxen-tooltip__trigger .discord-ping,
+.oraxen-tooltip:focus-within .oraxen-tooltip__trigger .discord-ping {
+  background-color: #5865f2;
+  color: #fff;
+}
