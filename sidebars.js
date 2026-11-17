@@ -40,12 +40,6 @@ const sidebars = {
           label: "🖼️ Glyphs",
           link: { type: "doc", id: "configuration/glyphs/index" },
           items: [
-            {
-              type: "category",
-              label: "✨ Text Effects",
-              link: { type: "doc", id: "configuration/glyphs/texteffects/index" },
-              items: [],
-            },
             "configuration/glyphs/huds",
           ],
         },
@@ -158,6 +152,7 @@ const sidebars = {
           label: "📂 Archives",
           link: { type: "doc", id: "compatibility/archives/index" },
           items: [
+            "compatibility/archives/texteffects/index",
             "compatibility/archives/bossshoppro",
             "compatibility/archives/cratereloaded",
             "compatibility/archives/trmenu",
