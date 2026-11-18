@@ -8,52 +8,52 @@ asIndexPage: true
 
 ## Overview
 
-The `block` mechanic lets players place Oraxen items as custom blocks. You can configure their appearance, placement, breaking rules, sounds, and player interactions.
+Oraxen lets you create custom blocks, stairs, trapdoors, doors and more using the `block` mechanic.
 
 ## Configuration
 
 Blocks are configured as items in `.yml` files inside `plugins/Oraxen/items`.
 
 ```yaml
-magic_ore:
-  name: "<aqua>Magic Ore"
-  material: PAPER
-  pack:
-    generate_model: true
-    parent_model: block/cube_all
-    textures:
-      - default/magic_ore
+magic_ore: # Oraxen item ID for the block.
+  name: "<aqua>Magic Ore" # Display name of the item.
+  material: PAPER # Base Minecraft material used for the item.
+  pack: # Controls the item's hand and inventory appearance.
+    generate_model: true # Generates a model for the item.
+    parent_model: block/cube_all # Uses the cube model with one texture on all sides.
+    textures: # Textures used by the generated model.
+      - default/magic_ore # Texture applied to the cube.
   mechanics:
-    block:
-      type: FULL
-      custom-variation: 5
-      appearance:
-        model: magic_ore
-      block-sounds:
-        break-sound: block.stone.break
-        place-sound: block.stone.place
-      placeable:
-        floor: true
-        wall: true
-        roof: false
-      breaking:
-        - when: ["#minecraft:pickaxes"]
-          hardness: 3
-          drops:
-            - item: magic_ore
-              silk-touch: required
-              probability: 1.0
-            - item: magic_shard
-              silk-touch: forbidden
-              amount: 2..4
-              fortune: 0.5
-              probability: 1.0
-          durability:
-            remove: 1
-        - else:
-          hardness: 6
-          durability:
-            remove: 2
+    block: # Configures the item as a custom block.
+      type: FULL # Uses the FULL block type.
+      custom-variation: 5 # Identifies the backing block state.
+      appearance: # Controls the placed block's appearance.
+        model: magic_ore # Model shown when the block is placed.
+      block-sounds: # Sounds played by the block.
+        break-sound: block.stone.break # Sound played when the block breaks.
+        place-sound: block.stone.place # Sound played when the block is placed.
+      placeable: # Controls which surfaces allow placement.
+        floor: true # Allows placement on floors.
+        wall: true # Allows placement on walls.
+        roof: false # Disallows placement on roofs.
+      breaking: # Rules for breaking the block and dropping items.
+        - when: ["#minecraft:pickaxes"] # Applies this rule to pickaxes.
+          hardness: 3 # Controls how long the block takes to break with a pickaxe.
+          drops: # Items dropped when this rule applies.
+            - item: magic_ore # Drops the ore item.
+              silk-touch: required # Requires Silk Touch for this drop.
+              probability: 1.0 # Gives the drop a 100% chance.
+            - item: magic_shard # Drops magic shards.
+              silk-touch: forbidden # Drops shards only without Silk Touch.
+              amount: 2..4 # Drops between two and four shards.
+              fortune: 0.5 # Increases the amount by 50% per Fortune level.
+              probability: 1.0 # Gives the drop a 100% chance.
+          durability: # Controls the tool's durability change.
+            remove: 1 # Removes one durability point from the pickaxe.
+        - else: # Applies when no tool-specific rule matches.
+          hardness: 6 # Makes the block take longer to break with other tools.
+          durability: # Controls the tool's durability change.
+            remove: 2 # Removes two durability points from the tool.
 ```
 
 ### Types
