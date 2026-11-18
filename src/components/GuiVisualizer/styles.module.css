@@ -51,6 +51,16 @@
 }
 
 .stage image { image-rendering: pixelated; pointer-events: none; }
+.slotNumber {
+  fill: #303030;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 5px;
+  font-weight: 600;
+}
+.preview[data-loaded='true'] .slotNumber {
+  fill: #fff;
+  filter: drop-shadow(0 0.5px 0.6px #000);
+}
 .stage:focus, .stage:focus-visible { outline: none; }
 .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; padding: 0 1rem 1rem; text-align: left; }
 .controls fieldset { min-width: 0; margin: 0; padding: .75rem; border: 0; }
