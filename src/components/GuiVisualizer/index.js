@@ -3,6 +3,9 @@ import CodeBlock from '@theme/CodeBlock';
 import styles from './styles.module.css';
 
 const MAX_HEIGHT = 4096;
+const MAX_CHEST_ROWS = 6;
+const PANEL_BASE_HEIGHT = 114;
+const PREVIEW_HEIGHT = PANEL_BASE_HEIGHT + MAX_CHEST_ROWS * 18 + 64;
 const constrainPosition = ({x, y}) => ({
   x: Math.max(-2039, Math.min(2055, x)),
   y: Math.max(-4083, Math.min(4109, y)),
@@ -73,6 +76,59 @@ function NumberField({label, value, onChange, min, max}) {
   </label>;
 }
 
+const OPACITY_STOPS = [0, 25, 50, 75, 100];
+const SLIDER_THUMB_RADIUS = 8;
+
+function Slider({value, onChange, color, stops = [], min = 0, max = 100, valueText = `${value}%`}) {
+  const drag = useRef(null);
+  const toPercent = (point) => (point - min) / (max - min) * 100;
+  const progress = toPercent(value);
+
+  function move(event, offset) {
+    const {left, width} = event.currentTarget.getBoundingClientRect();
+    const travel = width - 2 * SLIDER_THUMB_RADIUS;
+    if (travel <= 0) return;
+    const position = event.clientX - left - SLIDER_THUMB_RADIUS - offset;
+    const percent = Math.max(0, Math.min(100, position / travel * 100));
+    const stop = stops.find((point) => Math.abs(toPercent(point) - percent) <= Math.min(4, 5 / travel * 100));
+    onChange(stop ?? Math.round(min + percent / 100 * (max - min)));
+  }
+
+  return <span className={styles.sliderTrack} style={{
+    '--slider-value': `${progress}%`,
+    '--slider-offset': `${SLIDER_THUMB_RADIUS * (1 - progress / 50)}px`,
+    '--slider-color': color,
+  }}>
+    <span className={styles.sliderTicks} aria-hidden="true">
+      {stops.map((stop) => <span key={stop} style={{insetInlineStart: `${toPercent(stop)}%`}} />)}
+    </span>
+    <input className={styles.slider} type="range" min={min} max={max} step={1} value={value} aria-valuetext={valueText}
+      onChange={(event) => onChange(Number(event.target.value))}
+      onPointerDown={(event) => {
+        if (event.button !== 0 || drag.current) return;
+        event.preventDefault();
+        const input = event.currentTarget;
+        input.dataset.pointerFocus = 'true';
+        input.focus({preventScroll: true});
+        input.setPointerCapture(event.pointerId);
+        const {left, width} = input.getBoundingClientRect();
+        const center = left + SLIDER_THUMB_RADIUS + (width - 2 * SLIDER_THUMB_RADIUS) * progress / 100;
+        const distance = event.clientX - center;
+        const onThumb = Math.abs(distance) <= SLIDER_THUMB_RADIUS;
+        drag.current = {id: event.pointerId, offset: onThumb ? distance : 0};
+        if (!onThumb) move(event, 0);
+      }}
+      onPointerMove={(event) => {
+        if (drag.current?.id === event.pointerId) move(event, drag.current.offset);
+      }}
+      onKeyDown={(event) => {delete event.currentTarget.dataset.pointerFocus;}}
+      onBlur={(event) => {delete event.currentTarget.dataset.pointerFocus;}}
+      onLostPointerCapture={(event) => {
+        if (drag.current?.id === event.pointerId) drag.current = null;
+      }} />
+  </span>;
+}
+
 export default function GuiVisualizer() {
   const [texture, setTexture] = useState(null);
   const [rows, setRows] = useState(6);
@@ -87,7 +143,7 @@ export default function GuiVisualizer() {
   const loadId = useRef(0);
   const drag = useRef(null);
   const svg = useRef(null);
-  const panelHeight = 114 + rows * 18;
+  const panelHeight = PANEL_BASE_HEIGHT + rows * 18;
   const inventoryY = rows * 18 + 31;
   const ascent = 13 - position.y;
   const shift = position.x - 8;
@@ -155,21 +211,23 @@ export default function GuiVisualizer() {
   }
 
   return <div className={styles.tool}>
-    <div className={styles.toolbar}>
-      <label className={styles.upload}>Add texture
-        <input type="file" accept="image/png" onChange={(event) => {
-          if (event.target.files[0]) loadTexture(event.target.files[0]);
-          event.target.value = '';
-        }} />
-      </label>
-      <span className={styles.file}>{texture ? `${texture.name} · ${texture.width} × ${texture.height} px` : ''}</span>
-      <SelectField label="Preview zoom" value={zoom} values={[1, 2, 3, 4]} format={(value) => value + "×"} onChange={setZoom} />
-    </div>
-    {error && <p role="alert" className={styles.error}>{error}</p>}
-    <div className={styles.preview} onDragOver={(event) => event.preventDefault()}
+    <div className={styles.preview} data-loaded={Boolean(texture)} onDragOver={(event) => event.preventDefault()}
       onDrop={(event) => {event.preventDefault(); loadTexture(event.dataTransfer.files[0]);}}>
-      <svg ref={svg} className={styles.stage} width={240 * zoom} height={(panelHeight + 64) * zoom}
-        viewBox={`-32 -32 240 ${panelHeight + 64}`} tabIndex={0} role="img"
+      <div className={styles.toolbar}>
+        <label className={styles.upload}>
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M8 10V2m-3 3 3-3 3 3M2 10v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3" />
+          </svg>
+          {texture ? 'Replace PNG' : 'Add PNG'}
+          <input type="file" accept="image/png" onChange={(event) => {
+            if (event.target.files[0]) loadTexture(event.target.files[0]);
+            event.target.value = '';
+          }} />
+        </label>
+        <SelectField label="Preview zoom" value={zoom} values={[1, 2, 3, 4]} format={(value) => value + "×"} onChange={setZoom} />
+      </div>
+      <svg ref={svg} className={styles.stage} width={240 * zoom} height={PREVIEW_HEIGHT * zoom}
+        viewBox={`-32 -32 240 ${PREVIEW_HEIGHT}`} tabIndex={0} role="img"
         aria-label="GUI alignment preview. Drag to move the texture or use arrow keys. Hold Shift to move eight pixels."
         onPointerDown={(event) => {
           if (!texture || event.button !== 0) return;
@@ -210,14 +268,19 @@ export default function GuiVisualizer() {
         </g>}
       </svg>
     </div>
-    <p className={`${styles.help} ${styles.previewHelp}`}>Drag the texture or focus the preview and use the arrow keys. Hold Shift for 8-pixel steps. Zoom changes only the preview.</p>
+    {error && <p role="alert" className={styles.error}>{error}</p>}
     <div className={styles.controls}>
       <fieldset><legend>Inventory and overlay</legend>
-        <SelectField label="Chest rows" value={rows} values={[1, 2, 3, 4, 5, 6]} format={(value) => value + " rows"} onChange={setRows} />
-        <label className={styles.field}>Texture opacity · {opacity}%
-          <input className={styles.slider} style={{"--slider-value": opacity + "%"}} type="range" min="0" max="100" value={opacity} onChange={(event) => setOpacity(Number(event.target.value))} />
+        <label className={styles.field}>
+          <span className={styles.sliderLabel}>Chest rows <span aria-hidden="true">{rows}</span></span>
+          <Slider value={rows} onChange={setRows} min={1} max={6} stops={[1, 2, 3, 4, 5, 6]}
+            valueText={`${rows} ${rows === 1 ? 'row' : 'rows'}`} />
         </label>
-        <label><input type="checkbox" checked={grid} onChange={(event) => setGrid(event.target.checked)} /> Show slot guides and texture outline</label>
+        <label className={styles.field}>
+          <span className={styles.sliderLabel}>Texture opacity <span aria-hidden="true">{opacity}%</span></span>
+          <Slider value={opacity} onChange={setOpacity} stops={OPACITY_STOPS} />
+        </label>
+        <label className={styles.toggle}><input type="checkbox" checked={grid} onChange={(event) => setGrid(event.target.checked)} /> Show guides</label>
       </fieldset>
       <fieldset><legend>Glyph alignment</legend>
         <NumberField label="Glyph height" value={height} min={1} max={MAX_HEIGHT} onChange={setHeight} />
@@ -228,7 +291,7 @@ export default function GuiVisualizer() {
       <fieldset><legend>Oraxen configuration</legend>
         <label className={styles.field}>Glyph ID<input type="text" value={glyph} spellCheck={false} onChange={(event) => setGlyph(event.target.value)} /></label>
         <label className={styles.field}>Texture path<input type="text" value={path} spellCheck={false} onChange={(event) => setPath(event.target.value)} /></label>
-        <p className={styles.help}>Use the path relative to pack/textures, without .png. Height scales the full image, including transparent pixels.</p>
+
       </fieldset>
     </div>
     {!validGlyph && <p role="alert" className={styles.error}>Use lowercase letters, numbers, and underscores for the glyph ID.</p>}
