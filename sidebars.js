@@ -30,9 +30,16 @@ const sidebars = {
               ],
             },
             "configuration/items/appearance",
-            "configuration/items/mechanics",
-            "configuration/items/tridents",
-            "configuration/items/furniture",
+            {
+              type: "category",
+              label: "🔧 Mechanics",
+              link: { type: "doc", id: "configuration/items/mechanics/index" },
+              items: [
+                "configuration/items/mechanics/tridents",
+                "configuration/items/mechanics/furniture",
+                "configuration/items/mechanics/blocks",
+              ],
+            },
           ],
         },
         {
