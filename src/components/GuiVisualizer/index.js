@@ -196,16 +196,16 @@ export default function GuiVisualizer() {
     return new DOMPoint(event.clientX, event.clientY).matrixTransform(matrix.inverse());
   }
 
-  function slots(y, count, offset) {
+  function slots(y, count, offset, numbers = false) {
     return Array.from({length: count * 9}, (_, index) => {
       const x = 7 + index % 9 * 18;
       const top = y + Math.floor(index / 9) * 18;
+      if (numbers) return <text key={index} className={styles.slotNumber} x={x + 9} y={top + 9}
+        textAnchor="middle" dominantBaseline="central">{offset + index}</text>;
       return <g key={index}>
         <rect x={x} y={top} width="18" height="18" fill="#555" />
         <path d={`M${x + 1} ${top + 17}h16v-16`} fill="none" stroke="#eee" />
         <rect x={x + 1} y={top + 1} width="16" height="16" fill="#999" />
-        {grid && <><rect x={x + 0.5} y={top + 0.5} width="17" height="17" fill="none" stroke="#29d8dc" strokeWidth="0.5" />
-          <text x={x + 9} y={top + 11} textAnchor="middle" fontSize="5" fill="#132c35">{offset + index}</text></>}
       </g>;
     });
   }
@@ -261,10 +261,10 @@ export default function GuiVisualizer() {
         {slots(inventoryY, 3, rows * 9)}
         {slots(inventoryY + 58, 1, rows * 9 + 27)}
         {texture && <image href={texture.source} x={position.x} y={position.y} width={width} height={height} opacity={opacity / 100} />}
-        {texture && grid && <rect x={position.x} y={position.y} width={width} height={height} fill="none" stroke="#e35bb0" strokeWidth="0.5" strokeDasharray="2 2" />}
-        {grid && <g fill="none" stroke="#29d8dc" strokeWidth="0.4" pointerEvents="none">
-          {Array.from({length: rows * 9}, (_, i) => <rect key={i} x={7 + i % 9 * 18} y={17 + Math.floor(i / 9) * 18} width="18" height="18" />)}
-          {Array.from({length: 36}, (_, i) => <rect key={i} x={7 + i % 9 * 18} y={inventoryY + (i < 27 ? Math.floor(i / 9) * 18 : 58)} width="18" height="18" />)}
+        {grid && <g pointerEvents="none">
+          {slots(17, rows, 0, true)}
+          {slots(inventoryY, 3, rows * 9, true)}
+          {slots(inventoryY + 58, 1, rows * 9 + 27, true)}
         </g>}
       </svg>
     </div>
