@@ -14,6 +14,7 @@ const sidebars = {
     {
       type: "category",
       label: "⚙️ Configuration",
+      className: "sidebar-configuration",
       link: { type: "doc", id: "configuration/index" },
       items: [
         {
