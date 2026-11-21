@@ -33,12 +33,13 @@ const sidebars = {
             "configuration/items/appearance",
             {
               type: "category",
-              label: "🔧 Mechanics",
-              link: { type: "doc", id: "configuration/items/mechanics/index" },
+              label: "🔧 Behavior",
+              link: { type: "doc", id: "configuration/items/behavior/index" },
               items: [
-                "configuration/items/mechanics/tridents",
-                "configuration/items/mechanics/furniture",
-                "configuration/items/mechanics/blocks",
+                "configuration/items/behavior/tridents",
+                "configuration/items/behavior/furniture",
+                "configuration/items/behavior/blocks",
+                "configuration/items/behavior/paintings",
               ],
             },
           ],
@@ -55,12 +56,6 @@ const sidebars = {
           type: "category",
           label: "🔊 Sounds",
           link: { type: "doc", id: "configuration/sounds/index" },
-          items: [],
-        },
-        {
-          type: "category",
-          label: "🏞️ Paintings",
-          link: { type: "doc", id: "configuration/paintings/index" },
           items: [],
         },
         {
