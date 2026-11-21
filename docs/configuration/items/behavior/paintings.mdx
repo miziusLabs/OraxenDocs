@@ -1,0 +1,59 @@
+---
+title: "🏞️ Paintings"
+description: "Creating custom paintings using Oraxen."
+asIndexPage: true
+---
+
+# 🏞️ Paintings
+
+## Overview
+Oraxen lets you create custom paintings.<br />
+This requires Paper `1.21.3` or higher. The `painting_variant` item component used to give paintings as items requires Paper `1.21.5` or higher.
+
+## Configuration
+Paintings are configured in `plugins/Oraxen/paintings.yml`. Each entry under `paintings:` registers one painting.
+
+<PluginFileTree
+  initialTreeData={[
+    {
+      id: "plugins",
+      name: "plugins",
+      children: [
+        {
+          id: "plugins/Oraxen",
+          name: "Oraxen",
+          children: [
+            {
+              id: "plugins/Oraxen/paintings.yml",
+              name: "paintings.yml",
+            }
+          ]
+        }
+      ]
+    }
+  ]}
+/>
+
+```yml
+paintings:
+  oraxen:edna: # Namespaced key identifying the painting variant.
+    enabled: true # Registers the painting. Set to false to disable it without deleting the entry.
+    author: the_jan_craft # Author of the painting. Supports MiniMessage formatting.
+    title: <red>Edna Painting # Title of the painting. Supports MiniMessage formatting. Defaults to the key path.
+    asset_id: oraxen:edna # Texture used by the painting. Defaults to the painting key.
+    width: 1 # Width of the painting in blocks. Ranges from 1 to 16.
+    height: 1 # Height of the painting in blocks. Ranges from 1 to 16.
+    include_in_random: false # Lets the painting be randomly selected when a player places a painting.
+```
+
+Paintings are hot-reloadable, so changes do not require a server restart. Run `/oraxen reload paintings` to re-register them. You need to rejoin for some changes to apply, which is a limitation of Minecraft.
+
+### Texture
+
+`asset_id` controls the texture the painting displays. Painting textures live in `plugins/Oraxen/pack/assets/oraxen/textures/painting/`.
+
+For example, `oraxen:edna` refers to `assets/oraxen/textures/painting/edna.png`, and `minecraft:ball` refers to `assets/minecraft/textures/painting/ball.png`. A key without a namespace, such as `edna`, becomes `oraxen:edna`.
+
+### Painting items
+
+Paintings placed in the world are entities, not items. To give a custom painting to a player, add the `painting_variant` component to an Oraxen item. Details can be found <Highlight color="#1877F2" to="/configuration/items/data/components#painting_variant"><strong>here</strong></Highlight> and in <Highlight color="#2E8B57" to="/usage/tutorials/491d3"><strong>this tutorial</strong></Highlight>.
