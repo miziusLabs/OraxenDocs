@@ -158,13 +158,13 @@ mechanics:
 ```
 
 **Options**<br />
-`amount` defines how many half-hearts are leeched.
+`amount` defines the extra damage added to the hit. Armor, resistance, and totems reduce it, and the player heals by the health the target actually lost from it.
 </Details>
 
 <Details>
     <summary id="bleeding"><strong>🩹 `bleeding`</strong></summary>
 
-Applies bleed damage over time on hit.<br />
+Applies bleed damage over time on hit. Bleed damage ignores armor and causes no knockback. A kill from bleeding credits the attacker.<br />
 
 ```yaml
 mechanics:
@@ -332,7 +332,7 @@ mining:
 <Details>
     <summary id="smelting"><strong>🔥 `smelting`</strong></summary>
 
-Automatically smelts supported mined blocks.<br />
+Smelts the drops of blocks mined with the item. Every drop with a furnace recipe, including custom furnace recipes, becomes the recipe result. Drops follow the tool, so tool requirements, Fortune, and Silk Touch apply like in vanilla.<br />
 
 ```yaml
 mechanics:
@@ -350,7 +350,7 @@ smelting:
   blacklist_cooked:
     - WET_SPONGE
 ```
-`blacklist_cooked` defines drops that should never be smelted.
+`blacklist_cooked` lists drops that are never smelted.
 </Details>
 
 <Details>
@@ -385,12 +385,13 @@ mechanics:
   bedrockbreak:
     hardness: 10
     probability: 1
+    delay: 0
 ```
 
 **Options**<br />
 `hardness` defines the delay between break animation updates.<br />
 `probability` defines the chance to receive the bedrock drop.<br />
-`delay` defines the delay in ticks before breaking starts.
+`delay` defines the number of ticks before the break animation starts. Defaults to `0`.
 
 **Global configuration**<br />
 ```yaml
@@ -399,6 +400,7 @@ bedrockbreak:
   disable_on_first_layer: false
   durability_cost: 500
 ```
+`durability_cost` defines the durability the tool loses per broken bedrock block. Unbreaking and custom item durability apply. Set it to `0` to disable tool damage.
 
 <Callout type="warning">
   This mechanic uses Oraxen's packet handling. On legacy servers without native packet support, PacketEvents is required.
@@ -677,7 +679,7 @@ mechanics:
 ```
 
 **Options**<br />
-Use either `ratio` or `fixed_amount` for a given repair item.
+Use either `ratio` or `fixed_amount` for a given repair item. If neither is set, the item doesn't repair.
 
 **Global configuration**<br />
 ```yaml
@@ -726,7 +728,7 @@ mechanics:
       one_usage: false
       cooldown: 40
       conditions:
-        - '#player.isSneaking()'
+        - 'player.isSneaking()'
       actions:
         - '[console] say <player> used the item'
         - '[message] <green>Hello <player>!'
@@ -736,7 +738,7 @@ mechanics:
 `event` defines the trigger. Supported types are `BREAK`, `CLICK`, `INV_CLICK`, `DROP`, `PICKUP`, `EQUIP`, `UNEQUIP`, and `DEATH`. `CLICK` accepts optional parameters as `CLICK:<right|left|all>:<air|block|all>`.<br />
 `one_usage` consumes one item when the actions run. Defaults to `false`.<br />
 `cooldown` defines the delay between uses in ticks.<br />
-`conditions` defines optional expressions evaluated on the player. All must pass for the actions to run.<br />
+`conditions` defines optional expressions. All must pass for the actions to run. Use `player` or `#player` for the player and `server` or `#server` for the server, the same as in [block and furniture conditions](#conditions).<br />
 `actions` defines the actions to run. Supported prefixes are `[console]`, `[player]`, `[message]`, `[actionbar]`, and `[sound]`. `<player>` is replaced by the player name. A variant without actions is ignored.
 </Details>
 
@@ -799,7 +801,7 @@ mechanics:
 <Details>
     <summary id="hat"><strong>🎩 `hat`</strong></summary>
 
-Lets the item be worn on the player's head.<br />
+Lets the item be worn on the player's head. Right-click with the item to equip it. Right-clicking a usable block, such as a chest or door, uses the block. Sneak while right-clicking to equip the hat instead.<br />
 
 ```yaml
 mechanics:
@@ -849,7 +851,7 @@ mechanics:
 ```
 
 **Options**<br />
-`lose_chance` is a value from `0` to `1`.
+`lose_chance` is a percentage from `0` to `100`.
 </Details>
 
 <Details>
@@ -1075,8 +1077,10 @@ table:
 `item` defines an alternate display item when placed.<br />
 `appearance` sets the model and textures for placed furniture separately from the inventory item. It accepts the same model, texture, and model-generation options as the item's `pack` section. Use `appearance.models` to map growth-stage names to models.<br />
 `limited_placing`, `blocklocker`, and `storage` add placement rules, protection, and container behavior. `limited_placing` also supports `block_tags`, `oraxen_blocks`, and a `radius_limitation` subsection with `radius` and `amount`. `storage` also supports `open_sound`, `close_sound`, `open_animation`, `close_animation`, `volume`, and `pitch`.<br />
+`limited_placing.type` accepts `ALLOW` or `DENY` in any case. An invalid value logs a warning and falls back to `DENY`.<br />
+`storage.type` accepts `STORAGE`, `PERSONAL`, `ENDERCHEST`, `DISPOSAL`, or `SHULKER` in any case. An invalid value logs a warning and falls back to `STORAGE`. A `SHULKER` storage that holds items drops one item with its contents, and the contents come back when the item is placed again.<br />
 `jukebox` lets the furniture play music discs and swap to an active model.<br />
-`evolution`, `farmland_required`, and `farmblock_required` support plant and farming setups. `evolution` also supports `light_boost`, `rain_boost`, and `bone_meal` subsections.<br />
+`evolution`, `farmland_required`, and `farmblock_required` support plant and farming setups. `evolution` also supports `light_boost`, `rain_boost`, and `bone_meal` subsections. `rain_boost` only applies when nothing covers the furniture. The furniture's own barriers don't count as cover.<br />
 `text_entity` and `text_entities` configure attached text displays. Text displays also support `line_width`, `background_color`, `text_opacity`, `see_through`, `shadow`, `default_background`, `alignment`, `billboard`, `scale`, `view_range`, and `refresh_ticks`.<br />
 `properties` configures furniture rendering under `mechanics.furniture`. The available options depend on `type`.<br />
 For `DISPLAY_ENTITY`, `properties` supports `display_transform`, `scale`, `translation`, `brightness.block_light`, `brightness.sky_light`, `tracking_rotation`, `view_range`, `interpolation_duration`, `interpolation_delay`, `shadow_strength`, `shadow_radius`, `displayWidth`, and `displayHeight`.<br />

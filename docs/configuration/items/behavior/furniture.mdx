@@ -91,11 +91,11 @@ table:
         floor: true # Allows placement on floors.
         wall: false # Allows placement on walls when enabled.
         roof: false # Allows placement on the underside of blocks when enabled.
-        type: ALLOW # Allow placement on the listed blocks.
+        type: ALLOW # ALLOW or DENY placement on the listed blocks. Defaults to DENY.
         block_types: # Blocks where players can place the furniture.
           - GRASS_BLOCK
       storage: # Give the furniture an inventory.
-        type: STORAGE # Storage behavior used by the furniture.
+        type: STORAGE # STORAGE, PERSONAL, ENDERCHEST, DISPOSAL, or SHULKER.
         rows: 5 # Number of inventory rows in the storage.
         title: "<red>My Storage" # Title displayed in the storage interface.
       jukebox: # Music playback settings for jukebox furniture.
