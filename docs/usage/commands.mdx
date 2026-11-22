@@ -94,6 +94,8 @@ Repairs the item in your hand or all repairable items in your inventory.
 /oraxen repair all
 ```
 
+The command rejects values other than `hand` and `all`.
+
 `oraxen.command.repair` - Allows using `/oraxen repair`.<br />
 `oraxen.command.repair.all` - Allows using `/oraxen repair all`.<br />
 
@@ -418,6 +420,8 @@ Enables or disables Oraxen debug mode in `settings.yml`.
 /oraxen debug
 /oraxen debug <true|false>
 ```
+
+Without an argument, the command toggles debug mode. The argument only accepts `true` or `false`.
 
 `oraxen.command.debug` - Allows toggling debug mode.<br />
 </details>

@@ -76,7 +76,7 @@ general:
     books: true
 ```
 
-<code>general.language</code> selects the message language.<br />
+<code>general.language</code> selects the message language. If the language file doesn't exist, Oraxen logs a warning and uses English.<br />
 <code>general.update-checker.enabled</code> checks for Oraxen updates and notifies players with <code>oraxen.update.notify</code> when they join.<br />
 <code>general.update-checker.interval</code> sets the time between checks. Use a number followed by <code>s</code>, <code>m</code>, <code>h</code>, or <code>d</code>. The minimum is <code>10m</code>.<br />
 <code>general.auto-update.settings</code> updates `settings.yml` with current options when Oraxen starts.<br />
@@ -239,7 +239,7 @@ Enable at most one of <code>model-data.float</code> and <code>model-data.ids</co
 <code>pack.generation.atlas.generate</code> generates texture atlas files. <code>pack.generation.atlas.type</code> selects <code>SPRITE</code> or <code>folder</code> mode. <code>pack.generation.atlas.exclude-malformed-from-atlas</code> omits malformed textures from the atlas.<br />
 <code>pack.verification</code> checks textures and models for valid resource-pack formatting.<br />
 <code>pack.excluded-file-extensions</code> lists file extensions omitted from the final ZIP.<br />
-<code>pack.compression</code> sets the ZIP compression level.<br />
+<code>pack.compression</code> sets the ZIP compression level. Valid values are <code>NO_COMPRESSION</code>, <code>BEST_SPEED</code>, <code>DEFAULT_COMPRESSION</code>, and <code>BEST_COMPRESSION</code>, in any case. The default is <code>BEST_COMPRESSION</code>. An invalid value logs a warning and uses <code>BEST_COMPRESSION</code>.<br />
 <code>pack.protection.size-spoofing</code> spoofs entry sizes in the ZIP sent to clients to discourage ordinary extraction. It is disabled by default. This obfuscation is not encryption and does not affect the readable <code>unprotected-location</code> export.<br />
 <code>pack.protection.obfuscation.type</code> selects <code>NONE</code>, <code>SIMPLE</code>, or <code>FULL</code>. <code>SIMPLE</code> renames resource paths. <code>FULL</code> also renames namespaces.<br />
 <code>pack.comment</code> sets the ZIP archive comment.
@@ -322,7 +322,8 @@ The <code>polymath</code>, <code>lobfile</code>, <code>s3</code>, and <code>self
 <code>pack.upload.lobfile.pack-name</code> sets the Lobfile pack name. Multi-version uploads add the client version to this name.<br />
 <code>pack.upload.s3.prefix</code> sets an optional folder within the bucket. Leave it empty to store packs at the bucket root.<br />
 <code>pack.upload.s3.public-url</code> sets an optional public or CDN URL for the bucket. <code>pack.upload.s3.presigned-url-expiry</code> sets the URL lifetime in seconds when no public URL is set.<br />
-<code>pack.upload.self-host.host</code> is the bind address. <code>0.0.0.0</code> listens on all interfaces. <code>pack.upload.self-host.port</code> is the HTTP port, and <code>domain</code> is the address players use to download the pack.
+<code>pack.upload.self-host.host</code> is the bind address. <code>0.0.0.0</code> listens on all interfaces. <code>pack.upload.self-host.port</code> is the HTTP port, and <code>domain</code> is the address players use to download the pack.<br />
+Changes to <code>pack.upload</code>, such as <code>type</code> or the self-host <code>host</code>, <code>port</code>, and <code>domain</code>, apply when you reload the pack.
 
 ### Dispatch
 
@@ -344,9 +345,9 @@ pack:
 
 <code>pack.dispatch.send</code> sends the pack to players.<br />
 <code>pack.dispatch.mode</code> selects <code>JOIN</code> or <code>PRE-JOIN</code>. <code>PRE-JOIN</code> requires Paper 1.21.7 or above and falls back to <code>JOIN</code> if the server does not support it.<br />
-<code>pack.dispatch.timeout</code> sets how long Oraxen waits for a <code>PRE-JOIN</code> response before login continues. It accepts values such as <code>30s</code>, <code>500ms</code>, <code>1m</code>, or <code>20t</code>.<br />
+<code>pack.dispatch.timeout</code> sets how long Oraxen waits for a <code>PRE-JOIN</code> response before login continues. It also limits how long players stay frozen while the pack loads. It accepts values such as <code>30s</code>, <code>500ms</code>, <code>1m</code>, or <code>20t</code>.<br />
 <code>pack.dispatch.exclude</code> lists client versions that should not receive the pack. Quote each rule, such as <code>'&lt; 1.12'</code> or <code>'= 1.21.11'</code>.<br />
-<code>pack.dispatch.delay</code> sets a delay in seconds for <code>JOIN</code> mode. Values at or below zero send the pack immediately.<br />
+<code>pack.dispatch.delay</code> sets a delay for <code>JOIN</code> mode. It accepts values such as <code>5</code>, <code>5.5</code>, <code>"5s"</code>, <code>"100t"</code> for ticks, or <code>"2500ms"</code>. Plain numbers are seconds. Values at or below zero send the pack immediately.<br />
 <code>pack.dispatch.mandatory</code> makes the pack required.<br />
 <code>pack.dispatch.disable.movement</code> freezes player movement while the pack loads. <code>pack.dispatch.disable.damage</code> prevents damage during that time.<br />
 <code>pack.dispatch.prompt</code> sets the prompt shown with the pack request.<br />
@@ -426,10 +427,10 @@ pack:
           opped-player: []
 ```
 
-<code>pack.receive.enabled</code> enables pack status actions.<br />
+<code>pack.receive.enabled</code> enables pack status actions. On Minecraft 1.20.3 and above, the actions only apply to the pack Oraxen sends.<br />
 <code>pack.receive.loaded.actions.sound</code> controls the sound played after the pack loads. Its <code>enabled</code>, <code>type</code>, <code>volume</code>, and <code>pitch</code> options set whether the sound plays and how it sounds.<br />
 <code>pack.receive.loaded.actions.delay</code> delays loaded actions by a number of ticks.<br />
-<code>pack.receive.&lt;status&gt;.actions.message</code> controls the message for a pack status. Valid message types are <code>KICK</code>, <code>CHAT</code>, <code>ACTION_BAR</code>, and <code>TITLE</code>. Click and hover elements require <code>CHAT</code>.<br />
+<code>pack.receive.&lt;status&gt;.actions.message</code> controls the message for a pack status. Valid message types are <code>KICK</code>, <code>CHAT</code>, <code>ACTION_BAR</code>, and <code>TITLE</code>, in any case. An invalid or missing type logs a warning and falls back to <code>CHAT</code>. Click and hover elements require <code>CHAT</code>.<br />
 <code>pack.receive.&lt;status&gt;.actions.commands</code> runs commands as the console, player, or temporarily opped player.<br />
 Supported statuses are <code>loaded</code>, <code>accepted</code>, <code>denied</code>, <code>failed-download</code>, <code>failed-reload</code>, <code>downloaded</code>, <code>invalid-url</code>, and <code>discarded</code>. On Minecraft 1.20.3 and above, <code>failed-reload</code>, <code>downloaded</code>, <code>invalid-url</code>, and <code>discarded</code> are also available.
 </Details>
@@ -458,8 +459,8 @@ utils:
 <code>utils.hide.scoreboard.numbers</code> hides scoreboard numbers.<br />
 <code>utils.hide.scoreboard.background</code> hides the scoreboard background on supported Minecraft versions.<br />
 <code>utils.hide.tablist.background</code> hides the tablist background on supported Minecraft versions.<br />
-<code>utils.recipes.reset</code> resets Oraxen recipes when the plugin reloads.<br />
-<code>utils.recipes.add-to-book</code> adds permitted recipes to player recipe books.<br />
+<code>utils.recipes.reset</code> resets Oraxen recipes when the plugin reloads. With <code>true</code>, Oraxen removes a broken recipe until you fix it. With <code>false</code>, Oraxen keeps its last working version.<br />
+<code>utils.recipes.add-to-book</code> adds permitted recipes to player recipe books when players join and for online players after <code>/oraxen reload recipes</code>.<br />
 <code>utils.armor-equip-event-bypass</code> lists blocks that do not trigger armor equipping when right-clicked.<br />
 <code>utils.display.shield</code>, <code>utils.display.bow</code>, and <code>utils.display.crossbow</code> set vanilla display transforms used by custom shields, bows, and crossbows.
 </Details>

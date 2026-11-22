@@ -459,9 +459,14 @@ Oraxen attempts to remove each listed recipe whenever recipes load or reload.
 ## Notes
 
 <Callout type="info">
-  If you edit recipe files manually, use `/oraxen reload recipes` to apply the changes without a full server restart.
+  If you edit recipe files manually, use `/oraxen reload recipes` to apply the changes without a full server restart. On Folia, recipe changes need a server restart.
+</Callout>
+
+<Callout type="warning">
+  Oraxen logs a broken recipe and skips it while the other recipes load. A duplicate recipe name is also logged and skipped. YAML syntax errors, an unknown recipe file, or a broken `tags.yml` or `disabled.yml` cancel the reload and keep the old recipes.<br />
+  With the default `utils.recipes.reset: true`, a broken recipe stays removed until you fix it. With `false`, Oraxen keeps its last working version.
 </Callout>
 
 <Callout type="note">
-  If `settings.yml` has recipe-book support enabled, Oraxen automatically discovers permitted recipes for players when they join.
+  If `settings.yml` has recipe-book support enabled, Oraxen discovers permitted recipes for players when they join and for online players after `/oraxen reload recipes`.
 </Callout>
