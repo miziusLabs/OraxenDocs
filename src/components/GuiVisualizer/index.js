@@ -6,6 +6,38 @@ const MAX_HEIGHT = 4096;
 const MAX_CHEST_ROWS = 6;
 const PANEL_BASE_HEIGHT = 114;
 const PREVIEW_HEIGHT = PANEL_BASE_HEIGHT + MAX_CHEST_ROWS * 18 + 64;
+const FONT = {
+  C: [14, 17, 1, 1, 1, 17, 14, 0], I: [7, 2, 2, 2, 2, 2, 7, 0], a: [0, 0, 14, 16, 30, 17, 30, 0],
+  e: [0, 0, 14, 17, 31, 1, 30, 0], i: [1, 0, 1, 1, 1, 1, 1, 0], n: [0, 0, 15, 17, 17, 17, 17, 0],
+  o: [0, 0, 14, 17, 17, 17, 14, 0], r: [0, 0, 13, 19, 1, 1, 1, 0], t: [2, 2, 7, 2, 2, 2, 4, 0],
+  v: [0, 0, 17, 17, 17, 10, 4, 0], y: [0, 0, 17, 17, 17, 30, 16, 15],
+};
+const rect = (x, y, w, h) => `M${x} ${y}h${w}v${h}h${-w}z`;
+const label = (text, x, y) => [...text].map((char) => {
+  const rows = FONT[char];
+  const path = rows.flatMap((bits, row) => [...Array(8).keys()].filter((column) => bits >> column & 1)
+    .map((column) => rect(x + column, y + row, 1, 1))).join('');
+  x += 32 - Math.clz32(rows.reduce((all, bits) => all | bits)) + 1;
+  return path;
+}).join('');
+const slotGrid = (y, count) => Array.from({length: count * 9}, (_, index) => [7 + index % 9 * 18, y + Math.floor(index / 9) * 18]);
+const panel = (rows) => {
+  const bottom = rows * 18 + 17;
+  const height = bottom + 96;
+  const slots = [...slotGrid(17, rows), ...slotGrid(bottom + 13, 3), ...slotGrid(bottom + 71, 1)];
+  return [
+    ['#c6c6c6', rect(2, 2, 172, height - 4)],
+    ['#fff', rect(2, 1, 171, 1) + rect(1, 2, 172, 1) + rect(1, 3, 3, 1) + rect(1, 4, 2, height - 7)],
+    ['#555', rect(173, 3, 2, height - 6) + rect(172, height - 4, 1, 1) + rect(3, height - 3, 172, 1) + rect(3, height - 2, 171, 1)],
+    ['#000', rect(2, 0, 171, 1) + rect(1, 1, 1, 1) + rect(173, 1, 1, 1) + rect(174, 2, 1, 1) + rect(0, 2, 1, height - 5)
+      + rect(175, 3, 1, height - 5) + rect(1, height - 3, 1, 1) + rect(2, height - 2, 1, 1) + rect(174, height - 2, 1, 1)
+      + rect(3, height - 1, 171, 1)],
+    ['#8b8b8b', slots.map(([x, y]) => rect(x, y, 18, 18)).join('')],
+    ['#373737', slots.map(([x, y]) => rect(x, y, 17, 1) + rect(x, y + 1, 1, 16)).join('')],
+    ['#fff', slots.map(([x, y]) => rect(x + 1, y + 17, 17, 1) + rect(x + 17, y + 1, 1, 16)).join('')],
+    ['#404040', label('Container', 8, 6) + label('Inventory', 8, rows * 18 + 20)],
+  ];
+};
 const constrainPosition = ({x, y}) => ({
   x: Math.max(-2039, Math.min(2055, x)),
   y: Math.max(-4083, Math.min(4109, y)),
@@ -143,8 +175,7 @@ export default function GuiVisualizer() {
   const loadId = useRef(0);
   const drag = useRef(null);
   const svg = useRef(null);
-  const panelHeight = PANEL_BASE_HEIGHT + rows * 18;
-  const inventoryY = rows * 18 + 31;
+  const inventoryY = rows * 18 + 30;
   const ascent = 13 - position.y;
   const shift = position.x - 8;
   const width = texture ? height * texture.width / texture.height : 0;
@@ -196,18 +227,9 @@ export default function GuiVisualizer() {
     return new DOMPoint(event.clientX, event.clientY).matrixTransform(matrix.inverse());
   }
 
-  function slots(y, count, offset, numbers = false) {
-    return Array.from({length: count * 9}, (_, index) => {
-      const x = 7 + index % 9 * 18;
-      const top = y + Math.floor(index / 9) * 18;
-      if (numbers) return <text key={index} className={styles.slotNumber} x={x + 9} y={top + 9}
-        textAnchor="middle" dominantBaseline="central">{offset + index}</text>;
-      return <g key={index}>
-        <rect x={x} y={top} width="18" height="18" fill="#555" />
-        <path d={`M${x + 1} ${top + 17}h16v-16`} fill="none" stroke="#eee" />
-        <rect x={x + 1} y={top + 1} width="16" height="16" fill="#999" />
-      </g>;
-    });
+  function slots(y, count, offset) {
+    return slotGrid(y, count).map(([x, top], index) => <text key={index} className={styles.slotNumber} x={x + 9} y={top + 9}
+      textAnchor="middle" dominantBaseline="central">{offset + index}</text>);
   }
 
   return <div className={styles.tool}>
@@ -253,18 +275,12 @@ export default function GuiVisualizer() {
           setPosition((current) => constrainPosition({x: current.x + dx * step, y: current.y + dy * step}));
         }}>
         <title>Chest inventory alignment</title>
-        <rect width="176" height={panelHeight} rx="3" fill="#b8b8b8" stroke="#333" strokeWidth="2" />
-        <path d={`M2 ${panelHeight - 3}V2h171`} fill="none" stroke="#eee" strokeWidth="2" />
-        <text x="8" y="13" fontSize="8" fill="#444">Container</text>
-        <text x="8" y={inventoryY - 6} fontSize="8" fill="#444">Inventory</text>
-        {slots(17, rows, 0)}
-        {slots(inventoryY, 3, rows * 9)}
-        {slots(inventoryY + 58, 1, rows * 9 + 27)}
+        <g shapeRendering="crispEdges">{panel(rows).map(([fill, d], index) => <path key={index} fill={fill} d={d} />)}</g>
         {texture && <image href={texture.source} x={position.x} y={position.y} width={width} height={height} opacity={opacity / 100} />}
         {grid && <g pointerEvents="none">
-          {slots(17, rows, 0, true)}
-          {slots(inventoryY, 3, rows * 9, true)}
-          {slots(inventoryY + 58, 1, rows * 9 + 27, true)}
+          {slots(17, rows, 0)}
+          {slots(inventoryY, 3, rows * 9)}
+          {slots(inventoryY + 58, 1, rows * 9 + 27)}
         </g>}
       </svg>
     </div>
