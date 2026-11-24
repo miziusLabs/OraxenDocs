@@ -67,6 +67,9 @@ table:
       seats: # Places where players can sit.
         - 0,0,0 # Faces the same direction as the furniture.
         - 0.5,0,0 90 # Faces 90 degrees.
+      beds: # Places where players can lie down.
+        - 0,0.6875,0 # Uses default bed options.
+        - 1,0.6875,0 true true false true # Allows daytime use and sets respawn.
       lights: # Places where the furniture gives off light.
         - 0,1,0 15 # One block above the furniture, with light level 15.
       restricted_rotation: VERY_STRICT # Limits the directions the furniture can face when placed.
@@ -248,6 +251,31 @@ mechanics:
     hitboxes:
       - 0,0,0 1,2 # Hitbox at the center of the furniture, one block wide and two blocks tall.
 ```
+
+### Beds
+
+Use `beds` to add spots where players can lie down on furniture. Each entry uses `x,y,z [skip_night] [reset_phantoms] [night_only] [set_respawn]`. The coordinates set where the player's head rests relative to the furniture and rotate with it. The player's feet point toward the side the player stood on when placing the furniture.
+
+```yaml
+mechanics:
+  furniture:
+    beds:
+      - 0,0.6875,0 # Uses default bed options.
+      - 1,0.6875,0 true true false true # Allows daytime use and sets respawn.
+```
+
+Right-clicking the furniture puts the player in the nearest free spot. Players get up by sneaking or clicking the Leave Bed button, and stand up next to the furniture. Breaking or rotating the furniture wakes everyone lying on it. When furniture has both `seats` and `beds`, right-clicking lies down, while sneaking and right-clicking still rotates rotatable furniture.
+
+| Option | Default | Effect |
+| --- | --- | --- |
+| `skip_night` | `true` | Counts the player toward skipping the night with `playersSleepingPercentage`. |
+| `reset_phantoms` | `true` | Resets the player's phantom timer when lying down. |
+| `night_only` | `true` | Allows lying down only at night or during a thunderstorm. Set `false` to allow any time. |
+| `set_respawn` | `false` | Sets the player's respawn point next to the furniture. |
+
+When the night is skipped, players in `skip_night` spots get up. Spots with `night_only` also wake players when the day starts.
+
+Beds require Minecraft 1.21.2 or newer.
 
 ### Lights
 
