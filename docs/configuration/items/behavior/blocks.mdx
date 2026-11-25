@@ -160,6 +160,7 @@ mechanics:
           - command: 'say "<Player> clicked this block"'
             executor: CONSOLE
             condition: 'player.hasPermission("myserver.block.use")'
+            cooldown: 1s
           - message: '<green>Hi <Player>!'
             conditions:
               - 'player.hasPermission("myserver.block.use")'
@@ -177,6 +178,8 @@ Add each action to the event's `actions` list. Oraxen runs them in order.
 Use `command` to run a command. Set `executor` to `PLAYER`, `CONSOLE`, or `OP-PLAYER`. The default is `PLAYER`.
 
 Use `message` to send MiniMessage text to the player. `<Player>`, `<player>`, and `<PLAYER>` insert the player's name. PlaceholderAPI placeholders work when PlaceholderAPI is installed.
+
+Add `cooldown` to limit how often each player can run an action. Use a whole number followed by `ms`, `s`, `m`, `h`, or `d`, such as `80ms`, `2s`, `3m`, `1h`, or `2d`. Each action has its own cooldown per player, shared by every placed copy of the block. While the cooldown is active, Oraxen skips the action without sending a message. The cooldown starts only when the action runs, so an action skipped by its conditions does not start it. If the cooldown is invalid, Oraxen skips the action and logs a warning. Cooldowns reset when Oraxen reloads.
 </Details>
 
 <Details>

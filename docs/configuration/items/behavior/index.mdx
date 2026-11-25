@@ -1112,6 +1112,7 @@ my_furniture:
             - command: 'say <Player> clicked this furniture'
               executor: CONSOLE
               condition: 'player.hasPermission("myserver.furniture.use")'
+              cooldown: 1s
             - message: '<green>Hello <Player>!'
               conditions:
                 - '!player.hasPermission("myserver.furniture")'
@@ -1126,6 +1127,10 @@ Break actions run after a successful player break. They do not run for cancelled
 Furniture with a `LEFT` or `BOTH` click event defaults to `breakable: false`. Other furniture, including furniture with only break events, defaults to `breakable: true`. Set `breakable` explicitly to override the default.<br />
 `command` uses `PLAYER` (default), `CONSOLE`, or `OP-PLAYER` as its `executor`.<br />
 `message` sends MiniMessage text to the player who triggered the event. `<Player>` (also `<player>` or `<PLAYER>`) inserts the player's name. PlaceholderAPI placeholders work when installed.
+
+### Cooldowns
+
+Add `cooldown` to limit how often each player can run an action. Use a whole number followed by `ms`, `s`, `m`, `h`, or `d`, such as `80ms`, `2s`, `3m`, `1h`, or `2d`. Each action has its own cooldown per player, shared by every placed copy of the block or furniture. While the cooldown is active, Oraxen skips the action without sending a message. The cooldown starts only when the action runs, so an action skipped by its conditions does not start it. If the cooldown is invalid, Oraxen skips the action and logs a warning. Cooldowns reset when Oraxen reloads.
 
 ### Conditions
 
