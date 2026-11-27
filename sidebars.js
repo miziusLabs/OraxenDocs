@@ -110,6 +110,7 @@ const sidebars = {
       link: { type: "doc", id: "compatibility/index" },
       items: [
         "compatibility/placeholderapi",
+        "compatibility/deluxemenus",
         "compatibility/skript",
         "compatibility/viaversion",
         "compatibility/packlayer",
