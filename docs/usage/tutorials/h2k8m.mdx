@@ -3,118 +3,100 @@ title: "🛡️ Creating custom armor using components"
 description: "Create a custom armor set using Minecraft's equippable component."
 ---
 
-import { Callout, Steps } from '@site/src/components/Compat'
+import { Steps } from '@site/src/components/Compat'
 
 # 🛡️ Creating custom armor using components
 
 ## Overview
 This tutorial demonstrates how to create a custom armor set using Minecraft's equippable component.
-Component-based armor requires Minecraft `1.21.2+`. For older versions, use the [armor trims tutorial](/usage/tutorials/g7p4t).
-
-<Callout type="important">
-	Armor pieces other than helmets do not support 3D models. This is a limitation of Minecraft and cannot be changed by Oraxen. Helmets support 3D models and therefore do not require armor-layer textures.
-</Callout>
+Component-based armor requires Minecraft `1.21.2+`. For older versions, use the [armor trims tutorial](/usage/tutorials/g7p4t). For all equipment options, see [Armor](/configuration/items/behavior/armor).
 
 ## Tutorial
 <Steps>
 
 ### Enable component-based armor
 
-Open `plugins/Oraxen/settings.yml` and configure the `custom-armor` section.
+Open `plugins/Oraxen/settings.yml` and set the armor type to `COMPONENT`.
 
 ```yaml
 custom-armor:
   type: COMPONENT
-  auto-select-type: true
-  disable-leather-repair: true
-  component:
-    auto-assign-component: true
 ```
-
-This tutorial defines the equippable component for each piece explicitly. With `custom-armor.component.auto-assign-component`, Oraxen can instead derive the component from correctly named item IDs.
 
 ### Add the textures
 
-Add two transparent worn textures, typically `64x32` pixels:
+Add two transparent worn textures, typically `64x32` pixels.
 
-- `ruby_armor_layer_1.png` contains the helmet, chestplate, and boots.
-- `ruby_armor_layer_2.png` contains the leggings.
-
-```text
-plugins/Oraxen/pack/textures/armor/ruby_armor_layer_1.png
-plugins/Oraxen/pack/textures/armor/ruby_armor_layer_2.png
-```
-
-Add an inventory icon, typically `16x16` pixels, for each piece in the same folder:
+- `sapphire_layer_1.png` contains the helmet, chestplate, and boots.
+- `sapphire_layer_2.png` contains the leggings.
 
 ```text
-ruby_helmet.png
-ruby_chestplate.png
-ruby_leggings.png
-ruby_boots.png
+plugins/Oraxen/pack/textures/armor/sapphire_layer_1.png
+plugins/Oraxen/pack/textures/armor/sapphire_layer_2.png
 ```
 
-The exact layer suffixes are required. Oraxen uses their shared `ruby` prefix to create the `oraxen:ruby` equipment model.
+Add an inventory icon, typically `16x16` pixels, for each piece in the same folder.
+
+```text
+sapphire_helmet.png
+sapphire_chestplate.png
+sapphire_leggings.png
+sapphire_boots.png
+```
 
 ### Configure the armor items
 
-Create `plugins/Oraxen/items/ruby_armor.yml` and add all four pieces.
+Create `plugins/Oraxen/items/sapphire_armor.yml` and add all four pieces.
 
 ```yaml
-ruby_helmet:
-  name: "<gradient:#ff1744:#9c0025>Ruby Helmet</gradient>"
-  material: PAPER
-  components:
-    equippable:
-      slot: HEAD
-      model: oraxen:ruby
+sapphire_helmet:
+  name: "<gradient:#ff1744:#9c0025>Sapphire Helmet</gradient>"
+  material: CHAINMAIL_HELMET
+  equipment:
+    id: sapphire
+    humanoid: armor/sapphire_layer_1
+    humanoid_leggings: armor/sapphire_layer_2
   pack:
     generate_model: true
     parent_model: "item/generated"
     textures:
-      - armor/ruby_helmet
+      - armor/sapphire_helmet
 
-ruby_chestplate:
-  name: "<gradient:#ff1744:#9c0025>Ruby Chestplate</gradient>"
-  material: PAPER
-  components:
-    equippable:
-      slot: CHEST
-      model: oraxen:ruby
+sapphire_chestplate:
+  name: "<gradient:#ff1744:#9c0025>Sapphire Chestplate</gradient>"
+  material: CHAINMAIL_CHESTPLATE
+  equipment:
+    id: sapphire
   pack:
     generate_model: true
     parent_model: "item/generated"
     textures:
-      - armor/ruby_chestplate
+      - armor/sapphire_chestplate
 
-ruby_leggings:
-  name: "<gradient:#ff1744:#9c0025>Ruby Leggings</gradient>"
-  material: PAPER
-  components:
-    equippable:
-      slot: LEGS
-      model: oraxen:ruby
+sapphire_leggings:
+  name: "<gradient:#ff1744:#9c0025>Sapphire Leggings</gradient>"
+  material: CHAINMAIL_LEGGINGS
+  equipment:
+    id: sapphire
   pack:
     generate_model: true
     parent_model: "item/generated"
     textures:
-      - armor/ruby_leggings
+      - armor/sapphire_leggings
 
-ruby_boots:
-  name: "<gradient:#ff1744:#9c0025>Ruby Boots</gradient>"
-  material: PAPER
-  components:
-    equippable:
-      slot: FEET
-      model: oraxen:ruby
+sapphire_boots:
+  name: "<gradient:#ff1744:#9c0025>Sapphire Boots</gradient>"
+  material: CHAINMAIL_BOOTS
+  equipment:
+    id: sapphire
   pack:
     generate_model: true
     parent_model: "item/generated"
     textures:
-      - armor/ruby_boots
+      - armor/sapphire_boots
 ```
 
-`PAPER` avoids an underlying vanilla armor texture. Keep `model: oraxen:ruby` on every piece and match each `slot` to its armor piece. Add attribute modifiers separately if the armor needs stats.
+Use the same `equipment.id` on every piece and set each inventory icon in `pack.textures`. Only the helmet declares `humanoid` and `humanoid_leggings`.
 
 ### Generate and apply the resource pack
 
@@ -128,10 +110,6 @@ Reapply the generated pack, then get the pieces from `/oraxen inv` or `/oraxen g
 
 </Steps>
 
-<Callout type="note">
-With `custom-armor.component.auto-assign-component: true`, you may omit `components.equippable`. Oraxen derives the slot and model from the shared prefix and one of the recognized suffixes: `_helmet`, `_chestplate`, `_leggings`, or `_boots`.
-</Callout>
-
 ## Troubleshooting
 
-If equipped armor is invisible or appears vanilla, verify that the server is running Minecraft `1.21.2+`, `type` is set to `COMPONENT`, the layer suffixes and shared `ruby` prefix are correct, every slot and model is configured correctly, and the regenerated pack is applied. Automatic assignment also requires recognized item suffixes.
+If equipped armor is invisible or appears vanilla, verify that the server runs Minecraft `1.21.2+`, `custom-armor.type` is `COMPONENT`, every piece uses the same `equipment.id`, the helmet points to `armor/sapphire_layer_1` and `armor/sapphire_layer_2`, and the regenerated pack is applied.

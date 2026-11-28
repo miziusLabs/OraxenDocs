@@ -36,6 +36,7 @@ const sidebars = {
               label: "🔧 Behavior",
               link: { type: "doc", id: "configuration/items/behavior/index" },
               items: [
+                "configuration/items/behavior/armor",
                 "configuration/items/behavior/tridents",
                 "configuration/items/behavior/furniture",
                 "configuration/items/behavior/blocks",

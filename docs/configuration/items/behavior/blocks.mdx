@@ -142,6 +142,12 @@ Add entries under a rule's `drops` list. A rule without drops gives no items.
 - `silk-touch` accepts `required`, `forbidden`, or `any`. The default is `any`. `true` also means `required`, and `false` means `any`.
 - `fortune` increases the amount by the configured fraction per Fortune level. For example, `0.5` adds 50% per level.
 
+### Placement and storage
+
+Set `limited-placing.type` to `DENY` to block placement only on the listed blocks. An empty list does not block any placement. Use `ALLOW` to allow placement only on listed blocks. An unrecognized type falls back to `DENY`.
+
+For `FULL`, `STRING`, and `CHORUS` blocks, `storage.type: SHULKER` drops one item that keeps the contents when the block is broken. Placing that item restores the contents.
+
 ### Events
 
 Add `events` to run actions when a player clicks, places, or breaks a block. Each event has a `trigger` and a list of `actions`.

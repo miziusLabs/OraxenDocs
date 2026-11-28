@@ -1,0 +1,66 @@
+---
+title: Armor
+description: Create custom armor and equipment.
+asIndexPage: true
+---
+
+# Armor
+
+## Overview
+Use the item-level `equipment` section to set worn textures for armor, elytras, mob armor, saddles, and harnesses. Use [`pack`](/configuration/items/appearance) for the item model and inventory icon.
+
+<img src="/assets/armors/layer.png" alt="An armor layer texture." width="650"/>
+
+## Configuration
+Add `equipment` to an item in `plugins/Oraxen/items`. Items with the same `id` share their worn textures, so each layer only needs to be set once. If you omit `id`, Oraxen uses the item ID. Use lowercase letters, numbers, dots, underscores, or hyphens, without a namespace.
+
+```yaml
+sapphire_helmet:
+  material: CHAINMAIL_HELMET
+  equipment:
+    id: sapphire
+    humanoid: armor/sapphire_layer_1
+    humanoid_leggings: armor/sapphire_layer_2
+
+sapphire_chestplate:
+  material: CHAINMAIL_CHESTPLATE
+  equipment:
+    id: sapphire
+```
+
+Place the textures at `plugins/Oraxen/pack/textures/armor/sapphire_layer_1.png` and `plugins/Oraxen/pack/textures/armor/sapphire_layer_2.png`. Texture references work like `pack.textures` and can point to files in uploaded packs.
+
+### Components
+
+Use `custom-armor.type: COMPONENT` in [`settings.yml`](/usage/settings) on Minecraft 1.21.2 or newer. Oraxen defaults the equipment model to `oraxen:<id>` and takes the slot from the material unless you set one explicitly. If the material has no equipment slot, `wings` uses `CHEST`, body layers use `BODY`, and saddle layers use `SADDLE`. For a material such as `PAPER` with only humanoid layers, set `components.equippable.slot` yourself.
+
+Oraxen infers allowed mobs for body and saddle slots from the layers. It keeps explicit [`equippable` settings](/configuration/items/data/components), and copies defaults such as equip sounds from the base material where available.
+
+If an item names a shared set without listing layers, Oraxen uses the set's layers to infer its slot and allowed mobs.
+
+If the merged pack contains `assets/oraxen/equipment/<id>.json`, Oraxen uses that file instead of generating one. On Minecraft 1.21.2 and 1.21.3, the path is `assets/oraxen/models/equipment/<id>.json`.
+
+### Layers
+
+| Layer | Minimum Minecraft version |
+| --- | --- |
+| `humanoid`, `humanoid_leggings`, `wings`, `wolf_body`, `horse_body`, `llama_body` | 1.21.2 |
+| `pig_saddle`, `strider_saddle`, `camel_saddle`, `horse_saddle`, `donkey_saddle`, `mule_saddle`, `skeleton_horse_saddle`, `zombie_horse_saddle` | 1.21.5 |
+| `happy_ghast_body` | 1.21.6 |
+| `nautilus_body`, `nautilus_saddle`, `camel_husk_saddle` | 1.21.11 |
+| `humanoid_baby` | 26.1 |
+
+Oraxen logs and skips layers the server does not support.
+
+```yaml
+amethyst_harness:
+  material: PAPER
+  equipment:
+    happy_ghast_body: armor/amethyst_harness
+```
+
+For a complete wing example, see [Creating an elytra](/usage/tutorials/39d3x).
+
+### Trims
+
+Use `custom-armor.type: TRIMS` for Minecraft 1.20.1 through 1.21.1. Set each piece's material to the configured `custom-armor.trims.material-replacement`, which defaults to `CHAINMAIL`. Oraxen assigns the `oraxen:<id>` trim from `humanoid` and `humanoid_leggings`. Oraxen also adds the `HIDE_ARMOR_TRIM` item flag. Other layers, including wings and mob armor, do not work in this mode.

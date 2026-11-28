@@ -76,7 +76,7 @@ Use a locale file such as `en_us.json`, `de_de.json` or `fr_fr.json` to override
 }
 ```
 
-Oraxen adds the entries from `global.json` to every locale during pack generation. If a locale file defines the same component, the language-specific value takes priority.
+Oraxen adds the entries from `global.json` to every locale during pack generation. If a locale file defines the same component, the language-specific value takes priority. If `global.json` is invalid, Oraxen logs a warning and builds the pack without global entries.
 
 See the <Highlight color="#1877F2" to="https://assets.mcasset.cloud/26.3/assets/minecraft/lang/en_us.json"><strong>full list of language components</strong></Highlight>.<br />
 
