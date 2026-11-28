@@ -13,8 +13,6 @@ Oraxen lets you create custom furniture using the `furniture` mechanic. It allow
 
 <img src="/assets/furniture/sitting.gif" alt="A player sitting on furniture." width="650"/>
 
-On Minecraft 1.20.5 and newer, removing the base entity with `/kill` or another plugin also removes its barriers, hitboxes, seats, and lights.
-
 ## Configuration
 Furniture is configured as items in `.yml` files inside the `plugins/Oraxen/items` folder.
 
@@ -295,13 +293,7 @@ These lights illuminate the surrounding blocks. To change how bright the furnitu
 
 ### Storage
 
-Set `storage.type` to `STORAGE`, `PERSONAL`, `ENDERCHEST`, `DISPOSAL`, or `SHULKER`. An invalid type falls back to `STORAGE`. A filled `SHULKER` drops one item that keeps its contents when broken. Placing that item restores the contents.
-
-### Placement and growth
-
-Set `limited_placing.type` to `ALLOW` to allow placement only on the listed blocks, or `DENY` to block placement on them. An invalid type falls back to `DENY`.
-
-`evolution.rain_boost` only applies to furniture open to the sky. The furniture's own barriers do not count as cover.
+A filled `SHULKER` drops one item that keeps its contents when broken. Placing that item restores the contents.
 
 ### Events
 
