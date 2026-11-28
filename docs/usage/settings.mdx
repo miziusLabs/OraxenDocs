@@ -133,7 +133,7 @@ glyphs:
 <Details>
 <summary id="custom-armor"><strong>🛡️ <code>custom-armor</code></strong></summary>
 
-Controls the custom armor system and its component or trim settings.
+Controls the custom armor system and its component or trim settings. For armor setup, see [Armor](/configuration/items/behavior/armor).
 
 ```yaml
 custom-armor:
@@ -150,9 +150,9 @@ custom-armor:
 <code>custom-armor.type</code> selects <code>COMPONENT</code>, <code>TRIMS</code>, or <code>NONE</code>.<br />
 <code>custom-armor.auto-select-type</code> chooses a supported armor type for the server version.<br />
 <code>custom-armor.disable-leather-repair</code> requires a copy of the custom armor piece instead of leather for repairs.<br />
-<code>custom-armor.component.auto-assign-component</code> assigns the equippable-model component unless the item config specifies one.<br />
+<code>custom-armor.component.auto-assign-component</code> assigns the equippable-model component unless the item config specifies one. This only applies to armor matched by texture filenames, not items using <code>equipment</code>.<br />
 <code>custom-armor.trims.material-replacement</code> selects the vanilla armor material used for trim-based armor. Valid values are <code>CHAINMAIL</code>, <code>IRON</code>, <code>GOLD</code>, <code>DIAMOND</code>, <code>NETHERITE</code>, and <code>LEATHER</code>.<br />
-<code>custom-armor.trims.auto-assign-settings</code> assigns the trim and item flag unless the item config specifies them.
+<code>custom-armor.trims.auto-assign-settings</code> assigns the trim and item flag unless the item config specifies them. This only applies to armor matched by texture filenames, not items using <code>equipment</code>.
 </Details>
 
 <Details>
@@ -184,7 +184,7 @@ updater:
 <code>updater.items.override-item-lore</code> replaces item lore with the configured lore.<br />
 <code>updater.items.update-on-reload</code> updates online players after <code>/oraxen reload items</code> or <code>/oraxen reload all</code>.<br />
 <code>updater.furniture.update-furniture</code> keeps placed furniture synced with its item config.<br />
-<code>updater.furniture.update-on-reload</code> updates furniture after item or full reloads.<br />
+<code>updater.furniture.update-on-reload</code> updates furniture after item or full reloads. On Folia, use <code>update-on-load</code> instead.<br />
 <code>updater.furniture.update-on-load</code> updates furniture when its entity loads.<br />
 <code>updater.furniture.experimental-type-update</code> enables furniture type updates.<br />
 <code>updater.furniture.experimental-fix-broken</code> attempts to repair furniture that is not placed or loaded correctly.
@@ -202,6 +202,7 @@ pack:
   generation:
     generate: true
     unprotected-location: ""
+    location: "plugins/Oraxen/pack/pack.zip"
     mcmeta: true
     multi-version-packs: false
     model-definitions: true
@@ -227,6 +228,7 @@ pack:
 
 <code>pack.generation.generate</code> enables resource-pack generation.<br />
 <code>pack.generation.unprotected-location</code> optionally writes an unprotected, unobfuscated ZIP after pack generation and before obfuscation. Oraxen does not upload or send this export to players. Relative paths use the server working folder, and Oraxen creates parent folders as needed. Keep the output outside <code>plugins/Oraxen/pack</code> so Oraxen does not import it on a later build.<br />
+<code>pack.generation.location</code> sets where Oraxen writes the generated resource-pack ZIP. Use an absolute path or a path relative to the server working folder. Leave it blank to use <code>plugins/Oraxen/pack/pack.zip</code>. Versioned packs are written next to the main ZIP.<br />
 <code>pack.generation.mcmeta</code> generates <code>pack.mcmeta</code> and overlay entries. Disable it to use the file in <code>plugins/Oraxen/pack</code> as supplied and manage overlays yourself.<br />
 <code>pack.generation.multi-version-packs</code> creates separate packs for clients on Minecraft 1.20 through 1.21.3 and clients on 1.21.4 and above. ViaVersion detects each client version. Without ViaVersion, players receive the server-version pack. Use an upload type other than self-host.<br />
 <code>pack.generation.model-definitions</code> generates modern item definitions for Minecraft 1.21.4 and above. Oraxen uses legacy item model overrides for clients that do not support item definitions.<br />
