@@ -1,42 +1,55 @@
 ---
-title: Armor
-description: Create custom armor and equipment.
+title: "🛡️ Armor"
+description: "Creating custom armor using Oraxen."
 asIndexPage: true
 ---
 
-# Armor
+# 🛡️ Armor
 
 ## Overview
-Use the item-level `equipment` section to set worn textures for armor, elytras, mob armor, saddles, and harnesses. Use [`pack`](/configuration/items/appearance) for the item model and inventory icon.
+Oraxen lets you create custom armor, elytras, mob armor, saddles, and harnesses using the `equipment` section.
 
 <img src="/assets/armors/layer.png" alt="An armor layer texture." width="650"/>
 
 ## Configuration
-Add `equipment` to an item in `plugins/Oraxen/items`. Items with the same `id` share their worn textures, so each layer only needs to be set once. If you omit `id`, Oraxen uses the item ID. Use lowercase letters, numbers, dots, underscores, or hyphens, without a namespace.
+Armor is configured as items in `.yml` files inside the `plugins/Oraxen/items` folder.
 
-```yaml
+```yml
 sapphire_helmet:
   material: CHAINMAIL_HELMET
   equipment:
-    id: sapphire
-    humanoid: armor/sapphire_layer_1
-    humanoid_leggings: armor/sapphire_layer_2
+    id: sapphire # Shared texture set for this item.
+    humanoid: armor/sapphire_layer_1 # Worn helmet, chestplate, and boots texture.
+    humanoid_leggings: armor/sapphire_layer_2 # Worn leggings texture.
+  pack:
+    generate_model: true
+    parent_model: item/generated
+    textures:
+      - armor/sapphire_helmet # Inventory icon.
 
 sapphire_chestplate:
   material: CHAINMAIL_CHESTPLATE
   equipment:
-    id: sapphire
+    id: sapphire # Shares the helmet's texture set.
 ```
 
-Place the textures at `plugins/Oraxen/pack/textures/armor/sapphire_layer_1.png` and `plugins/Oraxen/pack/textures/armor/sapphire_layer_2.png`. Texture references work like `pack.textures` and can point to files in uploaded packs.
+### Appearance
+
+- Use [`pack`](/configuration/items/appearance) for the item model and inventory icon.
+- Use `equipment.humanoid` for the worn helmet, chestplate, and boots texture.
+- Use `equipment.humanoid_leggings` for the worn leggings texture.
+- Use the same `equipment.id` on each piece to share textures. Define each layer once. If you omit the ID, Oraxen uses the item ID. Use lowercase letters, numbers, dots, underscores, or hyphens, without a namespace.
+
+For example, `armor/sapphire_layer_1` refers to `plugins/Oraxen/pack/textures/armor/sapphire_layer_1.png`. Texture references use the same format as `pack.textures` and can point to files in uploaded packs.
 
 ### Components
 
-Use `custom-armor.type: COMPONENT` in [`settings.yml`](/usage/settings) on Minecraft 1.21.2 or newer. Oraxen defaults the equipment model to `oraxen:<id>` and takes the slot from the material unless you set one explicitly. If the material has no equipment slot, `wings` uses `CHEST`, body layers use `BODY`, and saddle layers use `SADDLE`. For a material such as `PAPER` with only humanoid layers, set `components.equippable.slot` yourself.
+Use `custom-armor.type: COMPONENT` in [`settings.yml`](/usage/settings) on Minecraft 1.21.2 or newer.
 
-Oraxen infers allowed mobs for body and saddle slots from the layers. It keeps explicit [`equippable` settings](/configuration/items/data/components), and copies defaults such as equip sounds from the base material where available.
-
-If an item names a shared set without listing layers, Oraxen uses the set's layers to infer its slot and allowed mobs.
+- Oraxen defaults the model to `oraxen:<id>`.
+- Oraxen uses the material's slot. Without one, `wings` uses `CHEST`, body layers use `BODY`, and saddle layers use `SADDLE`. For a material such as `PAPER` with only humanoid layers, set `components.equippable.slot`.
+- Oraxen infers allowed mobs from the layers for body and saddle slots. An item that only names a shared set uses that set's layers.
+- Oraxen keeps explicit [`equippable` settings](/configuration/items/data/components) and copies defaults such as equip sounds from the base material where available.
 
 If the merged pack contains `assets/oraxen/equipment/<id>.json`, Oraxen uses that file instead of generating one. On Minecraft 1.21.2 and 1.21.3, the path is `assets/oraxen/models/equipment/<id>.json`.
 
@@ -51,6 +64,8 @@ If the merged pack contains `assets/oraxen/equipment/<id>.json`, Oraxen uses tha
 | `humanoid_baby` | 26.1 |
 
 Oraxen logs and skips layers the server does not support.
+
+For example, use `happy_ghast_body` to give a harness its worn texture.
 
 ```yaml
 amethyst_harness:
