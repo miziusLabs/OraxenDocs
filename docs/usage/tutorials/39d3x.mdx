@@ -8,7 +8,7 @@ import { Steps } from '@site/src/components/Compat'
 # 🪽 Creating an Elytra
 
 ## Overview
-Custom elytra textures require Minecraft `1.21.2` or newer and `custom-armor.type: COMPONENT` in `settings.yml`. The `equipment.wings` texture is visible while worn. The `pack` section controls how the elytra looks in the inventory. For all equipment options, see [Armor](/configuration/items/behavior/armor).
+Custom elytra textures require Minecraft `1.21.2` or newer and `custom-armor.type: COMPONENT` in `settings.yml`. Use `equipment.wings` for the worn texture and `pack` for the inventory icon. For all equipment options, see [Armor](/configuration/items/behavior/armor).
 
 <img src="/assets/armors/elytra.png" alt="A player wearing custom elytra." width="650"/>
 
@@ -66,12 +66,11 @@ Place your icon at `plugins/Oraxen/pack/textures/default/armors/amethyst_elytra_
 
 Place your Elytra texture at `plugins/Oraxen/pack/textures/default/armors/amethyst_elytra.png`.
 
-
 ### Reload and regenerate pack
 Run `/oraxen reload all` and then give yourself the item via `/oraxen give @s amethyst_elytra` (or get it from `/oraxen inv`).
 </Steps>
 
 ## Troubleshooting
-- Missing texture in inventory - check `pack.textures` and icon file path.
-- Texture in inventory works, but worn Elytra is wrong - check `equipment.wings` and `amethyst_elytra.png` file path.
-- No visible changes - reload Oraxen and re-apply the generated resource pack.
+- If the inventory texture is missing, check `pack.textures` and the icon file path.
+- If the inventory texture works but the worn elytra looks wrong, check `equipment.wings` and the `amethyst_elytra.png` file path.
+- If no changes appear, reload Oraxen and reapply the generated resource pack.

@@ -24,10 +24,10 @@ Oraxen provides a powerful system to merge multiple resource packs into a single
 </Callout>
 
 <Callout type="note">
-  Oraxen does not copy imported `pack.mcmeta` files as-is. The generated metadata keeps overlay entries, language declarations, resource filters, and Sodium settings. Identical entries in list settings such as `sodium.ignored_shaders` appear once. Only `assets/` content, overlay `assets/` content, `pack.mcmeta`, and `pack.png` are considered; other files are skipped.
+  Oraxen does not copy imported `pack.mcmeta` files as-is. The generated metadata keeps overlay entries, language declarations, resource filters, and Sodium settings. Duplicate entries in list settings such as `sodium.ignored_shaders` are only included once. Only `assets/` content, overlay `assets/` content, `pack.mcmeta`, and `pack.png` are considered; other files are skipped.
 </Callout>
 
-When merging matching equipment definitions, Oraxen draws higher priority layers on top of lower priority layers. It keeps one copy of identical atlas sources and font providers without changing their priority. Use `/oraxen debug true` to log the resource path and both pack names when one upload replaces a file from another with different contents.
+When merging matching equipment definitions, Oraxen draws higher-priority layers on top of lower-priority ones. Oraxen deduplicates identical atlas sources and font providers while keeping their original priority. Run `/oraxen debug true` to log the resource path and both pack names whenever an uploaded pack overwrites a file from another pack with different contents.
 
 `pack.import.exclude` filters files in the local pack folder and imported ZIP, folder, overlay, and ModelEngine contents. The rules filter files inside uploaded ZIPs, so those ZIPs remain import sources. Oraxen leaves the source files untouched and keeps resources it generates. See the [pack import settings](/usage/settings#import) for the default rules and pattern syntax.
 

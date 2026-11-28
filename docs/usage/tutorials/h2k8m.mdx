@@ -96,7 +96,7 @@ sapphire_boots:
       - armor/sapphire_boots
 ```
 
-Use the same `equipment.id` on every piece and set each inventory icon in `pack.textures`. Only the helmet declares `humanoid` and `humanoid_leggings`.
+Use the same `equipment.id` on every piece and set each inventory icon in `pack.textures`. Only the helmet needs to define `humanoid` and `humanoid_leggings`.
 
 ### Generate and apply the resource pack
 
@@ -112,4 +112,9 @@ Reapply the generated pack, then get the pieces from `/oraxen inv` or `/oraxen g
 
 ## Troubleshooting
 
-If equipped armor is invisible or appears vanilla, verify that the server runs Minecraft `1.21.2+`, `custom-armor.type` is `COMPONENT`, every piece uses the same `equipment.id`, the helmet points to `armor/sapphire_layer_1` and `armor/sapphire_layer_2`, and the regenerated pack is applied.
+If equipped armor is invisible or looks vanilla, check the following.
+
+- The server runs Minecraft `1.21.2` or newer.
+- `custom-armor.type` is set to `COMPONENT`.
+- Every piece uses the same `equipment.id`, and the helmet points to `armor/sapphire_layer_1` and `armor/sapphire_layer_2`.
+- You reloaded Oraxen and reapplied the regenerated resource pack.

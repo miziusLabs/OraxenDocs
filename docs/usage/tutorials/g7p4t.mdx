@@ -36,7 +36,7 @@ Add the worn textures and inventory icons as described in the [component-based a
 
 ### Configure the armor items
 
-Create the four armor pieces in `plugins/Oraxen/items/sapphire_armor.yml` as described in [Configure the armor items](/usage/tutorials/h2k8m#configure-the-armor-items). Use the same `CHAINMAIL` materials and `equipment` setup, which match `custom-armor.trims.material-replacement`.
+Create the four armor pieces in `plugins/Oraxen/items/sapphire_armor.yml` as described in [Configure the armor items](/usage/tutorials/h2k8m#configure-the-armor-items). Keep the `CHAINMAIL` materials and `equipment` setup so they match `custom-armor.trims.material-replacement`.
 
 Oraxen assigns the `oraxen:sapphire` trim from the `humanoid` and `humanoid_leggings` layers and applies it automatically to pieces with the same `equipment.id`.
 
@@ -48,7 +48,7 @@ Save the files and run the following command.
 /oraxen reload all
 ```
 
-Oraxen generates the `oraxen:sapphire` pattern and the `oraxen_trim_armor` datapack. Fully restart the server after generating the datapack for the first time; Minecraft's `/reload` command is not sufficient. Check `/datapack list` and, if necessary, enable the datapack with this command.
+Oraxen generates the `oraxen:sapphire` pattern and the `oraxen_trim_armor` datapack. Fully restart the server after generating the datapack for the first time. Minecraft's `/reload` command is not enough. Check `/datapack list` and, if necessary, enable the datapack with this command.
 
 ```text
 /datapack enable "file/oraxen_trim_armor"
@@ -60,4 +60,10 @@ Restart the server again after enabling the datapack.
 
 ## Troubleshooting
 
-If equipped armor appears vanilla or the trim is missing, verify that `custom-armor.type` is `TRIMS`, the pieces use the configured replacement material, every piece uses the same `equipment.id`, the datapack is enabled, and the server has been fully restarted. Trim armor must use real armor items such as `CHAINMAIL_HELMET`, not `PAPER`. Other layers, including wings and mob armor, do not work in this mode.
+If equipped armor looks vanilla or the trim is missing, check the following.
+
+- `custom-armor.type` is set to `TRIMS`.
+- Every piece uses the configured replacement material and the same `equipment.id`.
+- The `oraxen_trim_armor` datapack is enabled and the server has been fully restarted.
+
+Trim armor must use real armor items such as `CHAINMAIL_HELMET`, not `PAPER`. Other layers, including wings and mob armor, do not work in trim mode.

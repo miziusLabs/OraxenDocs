@@ -38,18 +38,20 @@ sapphire_chestplate:
 - Use [`pack`](/configuration/items/appearance) for the item model and inventory icon.
 - Use `equipment.humanoid` for the worn helmet, chestplate, and boots texture.
 - Use `equipment.humanoid_leggings` for the worn leggings texture.
-- Use the same `equipment.id` on each piece to share textures. Define each layer once. If you omit the ID, Oraxen uses the item ID. Use lowercase letters, numbers, dots, underscores, or hyphens, without a namespace.
+- Use the same `equipment.id` across pieces to share a texture set, so you only need to define each layer once.
 
-For example, `armor/sapphire_layer_1` refers to `plugins/Oraxen/pack/textures/armor/sapphire_layer_1.png`. Texture references use the same format as `pack.textures` and can point to files in uploaded packs.
+When `equipment.id` is omitted, Oraxen uses the item ID. IDs can contain lowercase letters, numbers, dots, underscores, and hyphens, with no namespace.
+
+For example, `armor/sapphire_layer_1` refers to `plugins/Oraxen/pack/textures/armor/sapphire_layer_1.png`. Texture paths use the same format as `pack.textures` and can also reference files in uploaded packs.
 
 ### Components
 
 Use `custom-armor.type: COMPONENT` in [`settings.yml`](/usage/settings) on Minecraft 1.21.2 or newer.
 
-- Oraxen defaults the model to `oraxen:<id>`.
-- Oraxen uses the material's slot. Without one, `wings` uses `CHEST`, body layers use `BODY`, and saddle layers use `SADDLE`. For a material such as `PAPER` with only humanoid layers, set `components.equippable.slot`.
-- Oraxen infers allowed mobs from the layers for body and saddle slots. An item that only names a shared set uses that set's layers.
-- Oraxen keeps explicit [`equippable` settings](/configuration/items/data/components) and copies defaults such as equip sounds from the base material where available.
+- The equipment model defaults to `oraxen:<id>`.
+- The equipment slot comes from the base material. If the material has no default slot, `wings` uses `CHEST`, body layers use `BODY`, and saddle layers use `SADDLE`. For a non-armor material such as `PAPER` with only humanoid layers, set `components.equippable.slot`.
+- For body and saddle slots, Oraxen determines which mobs can wear the item from its configured layers. Pieces that reference a shared `equipment.id` inherit that set's layers.
+- Any [`equippable` component settings](/configuration/items/data/components) you define are preserved, and Oraxen copies defaults such as equip sounds from the base material when available.
 
 If the merged pack contains `assets/oraxen/equipment/<id>.json`, Oraxen uses that file instead of generating one. On Minecraft 1.21.2 and 1.21.3, the path is `assets/oraxen/models/equipment/<id>.json`.
 
@@ -63,7 +65,7 @@ If the merged pack contains `assets/oraxen/equipment/<id>.json`, Oraxen uses tha
 | `nautilus_body`, `nautilus_saddle`, `camel_husk_saddle` | 1.21.11 |
 | `humanoid_baby` | 26.1 |
 
-Oraxen logs and skips layers the server does not support.
+Oraxen logs and skips any layer the server version does not support.
 
 For example, use `happy_ghast_body` to give a harness its worn texture.
 
@@ -74,8 +76,12 @@ amethyst_harness:
     happy_ghast_body: armor/amethyst_harness
 ```
 
-For a complete wing example, see [Creating an elytra](/usage/tutorials/39d3x).
+For a complete elytra example, see [Creating an Elytra](/usage/tutorials/39d3x).
 
 ### Trims
 
-Use `custom-armor.type: TRIMS` for Minecraft 1.20.1 through 1.21.1. Set each piece's material to the configured `custom-armor.trims.material-replacement`, which defaults to `CHAINMAIL`. Oraxen assigns the `oraxen:<id>` trim from `humanoid` and `humanoid_leggings`. Oraxen also adds the `HIDE_ARMOR_TRIM` item flag. Other layers, including wings and mob armor, do not work in this mode.
+Use `custom-armor.type: TRIMS` in [`settings.yml`](/usage/settings) on Minecraft 1.20.1 through 1.21.1.
+
+- Set each piece's material to the material configured in `custom-armor.trims.material-replacement`, which defaults to `CHAINMAIL`.
+- Oraxen generates and assigns the `oraxen:<id>` trim from `humanoid` and `humanoid_leggings`, and adds the `HIDE_ARMOR_TRIM` item flag.
+- Other layers, such as wings and mob armor, are not supported in trim mode.
